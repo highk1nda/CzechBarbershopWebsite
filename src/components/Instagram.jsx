@@ -1,4 +1,5 @@
 import { Reveal } from './Reveal'
+import instagramSvg from '../../assets/svg/instagram-svgrepo-com.svg'
 
 const IG_URL = 'https://www.instagram.com/maisonbeauty_cz/'
 const photos = [
@@ -12,12 +13,10 @@ const photos = [
 
 function IgIcon({ size = 16 }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-      strokeLinecap="round" strokeLinejoin="round" width={size} height={size}>
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-    </svg>
+    <img src={instagramSvg} alt="" aria-hidden="true"
+      width={size} height={size}
+      style={{ filter: 'brightness(0) invert(72%) sepia(9%) saturate(494%) hue-rotate(247deg) brightness(0.98) contrast(0.92)' }}
+    />
   )
 }
 
@@ -39,6 +38,24 @@ export default function Instagram() {
           <p className="font-body text-base text-charcoal max-w-sm leading-relaxed">
             Každodenní inspirace, novinky a zákulisí salonu.
           </p>
+
+          {/* Profile stats */}
+          <div className="flex items-center gap-8 mt-6 pt-6 border-t border-stone/60">
+            <div className="text-center">
+              <p className="font-heading text-2xl text-ink">55</p>
+              <p className="font-body text-xs tracking-widest2 uppercase text-warm mt-0.5">Příspěvků</p>
+            </div>
+            <div className="w-px h-8 bg-stone" />
+            <div className="text-center">
+              <p className="font-heading text-2xl text-ink">2 200<span className="text-mauve">+</span></p>
+              <p className="font-body text-xs tracking-widest2 uppercase text-warm mt-0.5">Sledujících</p>
+            </div>
+            <div className="w-px h-8 bg-stone" />
+            <div className="text-center">
+              <p className="font-heading text-2xl text-ink">217</p>
+              <p className="font-body text-xs tracking-widest2 uppercase text-warm mt-0.5">Sleduje</p>
+            </div>
+          </div>
         </Reveal>
 
         {/* Grid */}

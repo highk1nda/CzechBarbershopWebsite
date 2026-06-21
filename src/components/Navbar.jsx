@@ -5,7 +5,6 @@ const links = [
   { href: '#services',  label: 'Služby'    },
   { href: '#team',      label: 'Tým'       },
   { href: '#gallery',   label: 'Galerie'   },
-  { href: '#booking',   label: 'Rezervace' },
   { href: '#contact',   label: 'Kontakt'   },
 ]
 

@@ -37,6 +37,15 @@
   @media (min-width: 1024px) { .section-padding { padding-block: 9rem; } }
 }
 
+/* Service icons — converts black SVGs to mauve (#b2a3b5) */
+.icon-svg {
+  filter: brightness(0) invert(72%) sepia(9%) saturate(494%) hue-rotate(247deg) brightness(0.98) contrast(0.92);
+  transition: filter 0.3s;
+}
+.group:hover .icon-svg {
+  filter: brightness(0) invert(47%) sepia(13%) saturate(510%) hue-rotate(256deg) brightness(0.88) contrast(0.95);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: #f3f0eb; }
