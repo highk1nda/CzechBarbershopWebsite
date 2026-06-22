@@ -1,9 +1,11 @@
 import { Reveal } from './Reveal'
 
 const team = [
-  { name: '[Jméno]',  role: 'Kadeřnice & Koloristka',       photo: '/assets/papuha.jpeg' },
-  { name: '[Jméno]',  role: 'Nehtová umělkyně',             photo: null },
-  { name: '[Jméno]',  role: 'Specialistka na řasy & obočí', photo: null },
+  { name: 'Kocka', role: 'Kadeřnice & Koloristka',       photo: '/assets/cat_avatar.jpg' },
+  { name: 'Sonya', role: 'Nehtová umělkyně',             photo: '/assets/cat_avatar2.jpg' },
+  { name: 'Siruy', role: 'Specialistka na řasy & obočí', photo: '/assets/cat_avatar3.jpg' },
+  { name: 'Maks',  role: 'Kadeřník & Stylista',          photo: '/assets/cat_avatar4.jpg' },
+  { name: 'Maria', role: 'Vizážistka & Koloristka',      photo: '/assets/cat_avatar5.jpg' },
 ]
 
 function Placeholder() {
@@ -37,7 +39,7 @@ export default function Team() {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           {team.map((member, i) => (
             <Reveal key={i} delay={i * 0.09}>
               <div className="bg-white border border-stone shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-500 group">
@@ -54,7 +56,9 @@ export default function Team() {
                     <p className="font-heading text-ink text-lg">{member.name}</p>
                     <p className="font-body text-sm tracking-wide uppercase text-mauve mt-1">{member.role}</p>
                   </div>
-                  <a href="#booking"
+                  <a
+                    href="#booking"
+                    onClick={() => sessionStorage.setItem('preferredPerson', member.name)}
                     className="flex-shrink-0 border border-stone text-warm font-body text-xs tracking-widest uppercase px-3.5 py-1.5 hover:border-mauve hover:text-mauve transition-all duration-300 mt-0.5">
                     Objednat
                   </a>

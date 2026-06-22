@@ -40,14 +40,15 @@ export default function Instagram() {
           </p>
 
           {/* Profile stats */}
-          <div className="flex items-center gap-8 mt-6 pt-6 border-t border-stone/60">
+          <a href={IG_URL} target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-8 mt-6 pt-6 border-t border-stone/60 hover:opacity-75 transition-opacity duration-300 cursor-pointer">
             <div className="text-center">
               <p className="font-heading text-2xl text-ink">55</p>
               <p className="font-body text-xs tracking-widest2 uppercase text-warm mt-0.5">Příspěvků</p>
             </div>
             <div className="w-px h-8 bg-stone" />
             <div className="text-center">
-              <p className="font-heading text-2xl text-ink">2 200<span className="text-mauve">+</span></p>
+              <p className="font-heading text-2xl text-ink">2 400<span className="text-mauve">+</span></p>
               <p className="font-body text-xs tracking-widest2 uppercase text-warm mt-0.5">Sledujících</p>
             </div>
             <div className="w-px h-8 bg-stone" />
@@ -55,7 +56,7 @@ export default function Instagram() {
               <p className="font-heading text-2xl text-ink">217</p>
               <p className="font-body text-xs tracking-widest2 uppercase text-warm mt-0.5">Sleduje</p>
             </div>
-          </div>
+          </a>
         </Reveal>
 
         {/* Grid */}

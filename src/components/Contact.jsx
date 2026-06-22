@@ -1,4 +1,5 @@
 import { Reveal } from './Reveal'
+import qrCode from '../../assets/qr code.png'
 
 const hours = [
   { day: 'Pondělí – Pátek', time: '9:00 – 19:00', closed: false },
@@ -65,6 +66,14 @@ export default function Contact() {
                       <span className={h.closed ? 'text-frost' : 'text-charcoal'}>{h.time}</span>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-stone flex items-center gap-5">
+                <img src={qrCode} alt="QR kód – MAISON beauty" className="w-20 h-20 object-contain flex-shrink-0" />
+                <div>
+                  <p className="font-body text-xs tracking-widest2 uppercase text-mauve mb-1">Naskenujte QR kód</p>
+                  <p className="font-body text-sm text-charcoal leading-relaxed">Rychlý přístup k naší stránce na telefonu.</p>
                 </div>
               </div>
             </div>
