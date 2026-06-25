@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Reveal } from './Reveal'
 import { ServiceIcon, Clock } from './ServiceIcons'
 import { SERVICES } from '../data/services'
+import FloatingFlower from './FloatingFlower'
+import flowers1Img   from '../../assets/flowers/flowers1.png'
+import flower3Img    from '../../assets/flower3.png'
 
 function ServiceRow({ item, index, hasDuration }) {
   return (
@@ -75,8 +78,25 @@ export default function Services() {
   let rowOffset = 0
 
   return (
-    <section id="services" className="section-padding bg-ivory">
-      <div className="max-w-5xl mx-auto px-6 lg:px-10">
+    <section id="services" className="section-padding bg-ivory relative overflow-hidden">
+
+      {/* Flower decorations */}
+      <FloatingFlower
+        src={flowers1Img}
+        style={{ top: '-30px', right: '-40px', width: '300px', opacity: 0.10 }}
+        amplitude={12}
+        duration={10}
+        delay={0.5}
+      />
+      <FloatingFlower
+        src={flower3Img}
+        style={{ bottom: '-50px', left: '-40px', width: '240px', opacity: 0.09, transform: 'rotate(20deg)' }}
+        amplitude={9}
+        duration={12}
+        delay={1.5}
+      />
+
+      <div className="max-w-5xl mx-auto px-6 lg:px-10 relative z-10">
 
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">

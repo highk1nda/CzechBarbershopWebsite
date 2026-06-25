@@ -2,6 +2,9 @@ import { useState, useMemo } from 'react'
 import emailjs from '@emailjs/browser'
 import { Reveal } from './Reveal'
 import { SERVICES } from '../data/services'
+import FloatingFlower from './FloatingFlower'
+import flowerImg  from '../../assets/flower.png'
+import flower3Img from '../../assets/flower3.png'
 
 // ─── EmailJS credentials ──────────────────────────────────────────────────────
 // Fill these in after setting up your EmailJS account (emailjs.com):
@@ -165,8 +168,14 @@ export default function Booking() {
 
   if (status === 'sent') {
     return (
-      <section id="booking" className="section-padding bg-ivory border-t border-stone">
-        <div className="max-w-3xl mx-auto px-6 lg:px-10 text-center">
+      <section id="booking" className="section-padding bg-ivory border-t border-stone relative overflow-hidden">
+        <FloatingFlower
+          src={flower3Img}
+          style={{ top: '-40px', right: '-30px', width: '280px', opacity: 0.10, transform: 'rotate(-15deg)' }}
+          amplitude={11}
+          duration={11}
+        />
+        <div className="max-w-3xl mx-auto px-6 lg:px-10 text-center relative z-10">
           <Reveal>
             <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-5">Rezervace online</p>
             <h2 className="font-heading text-4xl lg:text-5xl text-ink mb-4">
@@ -189,8 +198,24 @@ export default function Booking() {
   }
 
   return (
-    <section id="booking" className="section-padding bg-ivory border-t border-stone">
-      <div className="max-w-5xl mx-auto px-6 lg:px-10">
+    <section id="booking" className="section-padding bg-ivory border-t border-stone relative overflow-hidden">
+
+      <FloatingFlower
+        src={flower3Img}
+        style={{ top: '-40px', right: '-30px', width: '280px', opacity: 0.10, transform: 'rotate(-15deg)' }}
+        amplitude={11}
+        duration={11}
+        delay={0.8}
+      />
+      <FloatingFlower
+        src={flowerImg}
+        style={{ bottom: '-60px', left: '-50px', width: '260px', opacity: 0.10, transform: 'scaleX(-1)' }}
+        amplitude={9}
+        duration={13}
+        delay={2.5}
+      />
+
+      <div className="max-w-5xl mx-auto px-6 lg:px-10 relative z-10">
 
         <Reveal>
           <div className="text-center mb-10">

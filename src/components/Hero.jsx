@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion'
+import FloatingFlower from './FloatingFlower'
+import flowerImg    from '../../assets/flower.png'
+import flowers1Img  from '../../assets/flowers/flowers1.png'
 
 const stagger = {
   visible: { transition: { staggerChildren: 0.12, delayChildren: 0.25 } },
@@ -102,6 +105,23 @@ export default function Hero() {
       <div className="relative overflow-hidden flex flex-col justify-center px-6 lg:pl-16 xl:pl-24 py-20 lg:py-0 order-2 lg:order-1">
         <JustOpenedX />
 
+        {/* Lotus flower — bottom-right corner, behind all content */}
+        <FloatingFlower
+          src={flowerImg}
+          style={{ bottom: '-60px', right: '-50px', width: '380px', opacity: 0.16, zIndex: 0 }}
+          amplitude={14}
+          duration={9}
+          delay={0.3}
+        />
+        {/* Small flower peeking top-left */}
+        <FloatingFlower
+          src={flowerImg}
+          style={{ top: '-80px', left: '-60px', width: '220px', opacity: 0.09, zIndex: 0, transform: 'rotate(160deg) scaleX(-1)' }}
+          amplitude={8}
+          duration={11}
+          delay={2}
+        />
+
         <motion.div variants={stagger} initial="hidden" animate="visible" className="max-w-lg relative z-10">
 
           <motion.p variants={item}
@@ -150,6 +170,15 @@ export default function Hero() {
           loading="eager"
         />
         <div className="absolute inset-0 lg:bg-gradient-to-r lg:from-ivory/40 lg:via-transparent lg:to-transparent" />
+
+        {/* Anemone flowers overlay — bottom-left of the photo */}
+        <FloatingFlower
+          src={flowers1Img}
+          style={{ bottom: '-10px', left: '0px', width: '260px', opacity: 0.18, zIndex: 2, mixBlendMode: 'multiply' }}
+          amplitude={10}
+          duration={10}
+          delay={1}
+        />
       </motion.div>
 
     </section>

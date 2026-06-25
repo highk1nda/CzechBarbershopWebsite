@@ -1,9 +1,24 @@
+import { motion } from 'framer-motion'
+import flowers1Img from '../../assets/flowers/flowers1.png'
+
 const IG_URL = 'https://www.instagram.com/maisonbeauty_cz/'
 
 export default function Footer() {
   return (
-    <footer className="border-t border-stone bg-ivory py-10">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-5">
+    <footer className="border-t border-stone bg-ivory py-10 relative overflow-hidden">
+
+      {/* Anemones — decorative right edge */}
+      <motion.img
+        src={flowers1Img}
+        aria-hidden="true"
+        draggable={false}
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        className="pointer-events-none select-none absolute"
+        style={{ bottom: '-30px', right: '-20px', width: '180px', opacity: 0.15, mixBlendMode: 'multiply' }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-5 relative z-10">
 
         <p className="font-heading text-lg text-ink">
           MAISON <em className="text-mauve not-italic">beauty</em>
