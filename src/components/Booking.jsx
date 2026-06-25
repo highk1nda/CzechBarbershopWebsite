@@ -3,8 +3,9 @@ import emailjs from '@emailjs/browser'
 import { Reveal } from './Reveal'
 import { SERVICES } from '../data/services'
 import FloatingFlower from './FloatingFlower'
-import flowerImg  from '../../assets/flower.png'
-import flower3Img from '../../assets/flower3.png'
+
+const flowerImg  = '/assets/flower.png'
+const flower3Img = '/assets/flower3.png'
 
 // ─── EmailJS credentials ──────────────────────────────────────────────────────
 // Fill these in after setting up your EmailJS account (emailjs.com):

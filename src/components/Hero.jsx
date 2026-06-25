@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import FloatingFlower from './FloatingFlower'
-import flowerImg    from '../../assets/flower.png'
-import flowers1Img  from '../../assets/flowers/flowers1.png'
+
+const flowerImg   = '/assets/flower.png'
+const flowers1Img = '/assets/flowers/flowers1.png'
 
 const stagger = {
   visible: { transition: { staggerChildren: 0.12, delayChildren: 0.25 } },

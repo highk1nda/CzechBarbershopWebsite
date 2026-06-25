@@ -1,5 +1,6 @@
 import { Reveal } from './Reveal'
-import qrCode from '../../assets/qr code.png'
+
+const qrCode = '/assets/qr code.png'
 
 const hours = [
   { day: 'Pondělí – Pátek', time: '9:00 – 19:00', closed: false },

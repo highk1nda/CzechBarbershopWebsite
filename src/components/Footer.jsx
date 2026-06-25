@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import flowers1Img from '../../assets/flowers/flowers1.png'
+
+const flowers1Img = '/assets/flowers/flowers1.png'
 
 const IG_URL = 'https://www.instagram.com/maisonbeauty_cz/'
 

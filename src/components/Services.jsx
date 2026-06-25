@@ -4,8 +4,9 @@ import { Reveal } from './Reveal'
 import { ServiceIcon, Clock } from './ServiceIcons'
 import { SERVICES } from '../data/services'
 import FloatingFlower from './FloatingFlower'
-import flowers1Img   from '../../assets/flowers/flowers1.png'
-import flower3Img    from '../../assets/flower3.png'
+
+const flowers1Img = '/assets/flowers/flowers1.png'
+const flower3Img  = '/assets/flower3.png'
 
 function ServiceRow({ item, index, hasDuration }) {
   return (

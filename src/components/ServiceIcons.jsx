@@ -1,17 +1,19 @@
-import beardSvg       from '../../assets/svg/beard-svgrepo-com.svg'
-import brush1Svg      from '../../assets/svg/brush-1-svgrepo-com.svg'
-import brush3Svg      from '../../assets/svg/brush-3-svgrepo-com.svg'
-import curlingSvg     from '../../assets/svg/curling-svgrepo-com.svg'
-import hairdresserSvg from '../../assets/svg/hairdresser-with-scissors-cutting-the-hair-to-a-client-sitting-in-front-of-him-svgrepo-com.svg'
-import hairStyleSvg   from '../../assets/svg/hair-style-silhouette-svgrepo-com.svg'
-import longHairSvg    from '../../assets/svg/long-female-dark-hair-svgrepo-com.svg'
-import magicSvg       from '../../assets/svg/magic-svgrepo-com.svg'
-import refreshSvg     from '../../assets/svg/refresh-cw-alt-2-svgrepo-com.svg'
-import sparklesSvg    from '../../assets/svg/sparkles-outline-svgrepo-com.svg'
-import waterDropSvg   from '../../assets/svg/water-drop-svgrepo-com.svg'
-import wavesFillSvg   from '../../assets/svg/waves-fill-svgrepo-com.svg'
-import womanCutSvg    from '../../assets/svg/woman-hair-cut-svgrepo-com.svg'
-import womanStyleSvg  from '../../assets/svg/woman-hair-hairstyle-svgrepo-com.svg'
+const SVG = (name) => `/assets/svg/${name}`
+
+const beardSvg       = SVG('beard-svgrepo-com.svg')
+const brush1Svg      = SVG('brush-1-svgrepo-com.svg')
+const brush3Svg      = SVG('brush-3-svgrepo-com.svg')
+const curlingSvg     = SVG('curling-svgrepo-com.svg')
+const hairdresserSvg = SVG('hairdresser-with-scissors-cutting-the-hair-to-a-client-sitting-in-front-of-him-svgrepo-com.svg')
+const hairStyleSvg   = SVG('hair-style-silhouette-svgrepo-com.svg')
+const longHairSvg    = SVG('long-female-dark-hair-svgrepo-com.svg')
+const magicSvg       = SVG('magic-svgrepo-com.svg')
+const refreshSvg     = SVG('refresh-cw-alt-2-svgrepo-com.svg')
+const sparklesSvg    = SVG('sparkles-outline-svgrepo-com.svg')
+const waterDropSvg   = SVG('water-drop-svgrepo-com.svg')
+const wavesFillSvg   = SVG('waves-fill-svgrepo-com.svg')
+const womanCutSvg    = SVG('woman-hair-cut-svgrepo-com.svg')
+const womanStyleSvg  = SVG('woman-hair-hairstyle-svgrepo-com.svg')
 
 const ICON_SRCS = {
   scissors:  hairdresserSvg,

@@ -1,5 +1,5 @@
 import { Reveal } from './Reveal'
-import instagramSvg from '../../assets/svg/instagram-svgrepo-com.svg'
+const instagramSvg = '/assets/svg/instagram-svgrepo-com.svg'
 
 const IG_URL = 'https://www.instagram.com/maisonbeauty_cz/'
 const photos = [
