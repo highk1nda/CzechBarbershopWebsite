@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Reveal } from './Reveal'
 import { ServiceIcon, Clock } from './ServiceIcons'
@@ -8,13 +8,111 @@ import FloatingFlower from './FloatingFlower'
 const flowers1Img = '/assets/flowers/flowers1.png'
 const flower3Img  = '/assets/flower3.png'
 
-function ServiceRow({ item, index, hasDuration }) {
+// ─── Service detail modal ────────────────────────────────────────────────────
+
+function ServiceModal({ item, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      onClick={onClose}
+      className="fixed inset-0 bg-ink/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 28, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 16, scale: 0.97 }}
+        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+        onClick={e => e.stopPropagation()}
+        className="bg-ivory w-full max-w-lg shadow-lift relative overflow-y-auto max-h-[92vh]"
+      >
+        {/* Close */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-5 text-frost hover:text-ink text-3xl font-light transition-colors leading-none z-10"
+          aria-label="Zavřít"
+        >
+          ×
+        </button>
+
+        <div className="p-7 sm:p-10">
+          {/* Header */}
+          <p className="font-body text-[10px] tracking-widest3 uppercase text-mauve mb-3">Detail služby</p>
+          <h3 className="font-heading text-2xl sm:text-3xl text-ink mb-2 pr-8">{item.name}</h3>
+          <span className="mauve-rule block mb-6" />
+
+          {/* Description */}
+          <p className="font-body text-base text-charcoal leading-relaxed mb-6">
+            {item.details.text}
+          </p>
+
+          {/* Photos */}
+          {item.details.photos?.length > 0 && (
+            <div className={`grid gap-2 mb-6 ${item.details.photos.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+              {item.details.photos.slice(0, 2).map((src, i) => (
+                <div key={i} className="aspect-[4/3] overflow-hidden">
+                  <img src={src} alt="" loading="lazy" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Meta */}
+          <div className="border-t border-stone pt-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="font-body text-[10px] tracking-widest uppercase text-mauve">Cena</span>
+              <span className="font-heading text-mauve-deep font-semibold tabular-nums">{item.price}</span>
+            </div>
+            {item.duration && (
+              <div className="flex items-center justify-between">
+                <span className="font-body text-[10px] tracking-widest uppercase text-mauve">Délka</span>
+                <span className="font-body text-sm text-charcoal">{item.duration}</span>
+              </div>
+            )}
+            <div className="flex items-start justify-between gap-4">
+              <span className="font-body text-[10px] tracking-widest uppercase text-mauve flex-shrink-0 mt-0.5">Specialista</span>
+              <span className="font-body text-sm text-charcoal text-right">{item.workers.join(', ')}</span>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <a
+            href="#booking"
+            onClick={onClose}
+            className="mt-6 block text-center bg-mauve text-white font-body text-xs tracking-widest2 uppercase px-8 py-3.5 hover:bg-mauve-deep transition-colors duration-300"
+          >
+            Rezervovat termín
+          </a>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+// ─── Service row ─────────────────────────────────────────────────────────────
+
+function ServiceRow({ item, index, hasDuration, onExpand }) {
+  const hasDetails = Boolean(item.details)
+
   return (
     <motion.li
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.04 }}
-      className="flex items-center gap-4 py-4 border-b border-stone/60 last:border-0 group hover:bg-parchment/60 -mx-4 px-4 rounded transition-colors duration-200"
+      onClick={hasDetails ? () => onExpand(item) : undefined}
+      className={`flex items-center gap-4 py-4 border-b border-stone/60 last:border-0 group -mx-4 px-4 rounded transition-colors duration-200 ${
+        hasDetails
+          ? 'cursor-pointer hover:bg-parchment/80'
+          : 'hover:bg-parchment/60'
+      }`}
     >
       {/* Icon */}
       <div className="w-10 h-10 rounded-full border border-mauve/25 flex items-center justify-center flex-shrink-0 text-mauve group-hover:border-mauve/60 group-hover:bg-mauve/6 transition-all duration-300">
@@ -43,14 +141,22 @@ function ServiceRow({ item, index, hasDuration }) {
           {item.price}
         </span>
       </div>
+
+      {/* Details affordance — only shown when details exist */}
+      {hasDetails && (
+        <span className="flex-shrink-0 font-body text-[10px] tracking-widest uppercase text-mauve/60 border-b border-mauve/30 group-hover:text-mauve group-hover:border-mauve transition-colors duration-200 whitespace-nowrap">
+          Více info
+        </span>
+      )}
     </motion.li>
   )
 }
 
-function CategoryBlock({ category, globalIndex, hasDuration }) {
+// ─── Category block ───────────────────────────────────────────────────────────
+
+function CategoryBlock({ category, globalIndex, hasDuration, onExpand }) {
   return (
     <div className="mb-2">
-      {/* Category header */}
       <div className="flex items-center gap-3 mb-1 mt-6 first:mt-0">
         <span className="font-body text-xs tracking-widest3 uppercase text-mauve">{category.title}</span>
         <span className="flex-1 h-px bg-stone/70" />
@@ -63,6 +169,7 @@ function CategoryBlock({ category, globalIndex, hasDuration }) {
             item={item}
             index={globalIndex + i}
             hasDuration={hasDuration}
+            onExpand={onExpand}
           />
         ))}
       </ul>
@@ -70,12 +177,19 @@ function CategoryBlock({ category, globalIndex, hasDuration }) {
   )
 }
 
+// ─── Main component ───────────────────────────────────────────────────────────
+
 export default function Services() {
-  const [activeTab, setActiveTab] = useState(SERVICES[0].id)
-  const active = SERVICES.find(s => s.id === activeTab)
+  const [activeTab,  setActiveTab]  = useState(SERVICES[0].id)
+  const [detailItem, setDetailItem] = useState(null)
+  const active      = SERVICES.find(s => s.id === activeTab)
   const hasDuration = active.categories.some(c => c.items.some(i => i.duration))
 
-  // flat count for stagger offset
+  function handleTabChange(id) {
+    setActiveTab(id)
+    setDetailItem(null)
+  }
+
   let rowOffset = 0
 
   return (
@@ -130,7 +244,7 @@ export default function Services() {
             {SERVICES.map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`font-body text-sm tracking-widest uppercase px-5 py-2.5 border transition-all duration-300 ${
                   activeTab === tab.id
                     ? 'border-mauve bg-mauve text-white'
@@ -162,6 +276,7 @@ export default function Services() {
                   category={category}
                   globalIndex={offset}
                   hasDuration={hasDuration}
+                  onExpand={setDetailItem}
                 />
               )
             })}
@@ -175,6 +290,14 @@ export default function Services() {
         </AnimatePresence>
 
       </div>
+
+      {/* Detail modal */}
+      <AnimatePresence>
+        {detailItem && (
+          <ServiceModal item={detailItem} onClose={() => setDetailItem(null)} />
+        )}
+      </AnimatePresence>
+
     </section>
   )
 }

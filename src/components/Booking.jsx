@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import { Reveal } from './Reveal'
 import { SERVICES } from '../data/services'
@@ -6,6 +6,52 @@ import FloatingFlower from './FloatingFlower'
 
 const flowerImg  = '/assets/flower.png'
 const flower3Img = '/assets/flower3.png'
+
+// ─── Date / time helpers ─────────────────────────────────────────────────────
+
+// Fixed Czech public holidays as MM-DD
+const CZ_HOLIDAYS = ['01-01','05-01','05-08','07-05','07-06','09-28','10-28','11-17','12-24','12-25','12-26']
+
+// Gauss algorithm — returns Easter Sunday date
+function easterSunday(year) {
+  const a = year % 19, b = Math.floor(year / 100), c = year % 100
+  const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25)
+  const g = Math.floor((b - f + 1) / 3)
+  const h = (19 * a + b - d - g + 15) % 30
+  const i = Math.floor(c / 4), k = c % 4
+  const l = (32 + 2 * e + 2 * i - h - k) % 7
+  const m = Math.floor((a + 11 * h + 22 * l) / 451)
+  const month = Math.floor((h + l - 7 * m + 114) / 31)
+  const day   = ((h + l - 7 * m + 114) % 31) + 1
+  return new Date(year, month - 1, day)
+}
+
+function isBlockedDate(dateStr) {
+  if (!dateStr) return false
+  const d   = new Date(dateStr + 'T12:00:00')
+  const dow = d.getDay()
+  if (dow === 0 || dow === 6) return 'weekend'
+  const mmdd = dateStr.slice(5)
+  if (CZ_HOLIDAYS.includes(mmdd)) return 'holiday'
+  // Easter Monday
+  const easter  = easterSunday(d.getFullYear())
+  const monday  = new Date(easter); monday.setDate(monday.getDate() + 1)
+  const easterMmdd = `${String(monday.getMonth()+1).padStart(2,'0')}-${String(monday.getDate()).padStart(2,'0')}`
+  if (mmdd === easterMmdd) return 'holiday'
+  return false
+}
+
+function todayString() {
+  const now = new Date()
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
+}
+
+// Half-hour slots 8:00–17:00
+const TIME_SLOTS = []
+for (let h = 8; h <= 17; h++) {
+  TIME_SLOTS.push(`${String(h).padStart(2,'0')}:00`)
+  if (h < 17) TIME_SLOTS.push(`${String(h).padStart(2,'0')}:30`)
+}
 
 // ─── EmailJS credentials ──────────────────────────────────────────────────────
 // Fill these in after setting up your EmailJS account (emailjs.com):
@@ -121,6 +167,25 @@ function InputField({ label, type = 'text', value, onChange, required, placehold
   )
 }
 
+function SelectField({ label, value, onChange, required, children }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="font-body text-[10px] tracking-widest uppercase text-mauve">
+        {label}{required && <span className="text-mauve ml-0.5">*</span>}
+      </label>
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        required={required}
+        className="border border-stone bg-white font-body text-sm text-ink px-4 py-2.5 focus:outline-none focus:border-mauve transition-colors appearance-none cursor-pointer"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b2a3b5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center' }}
+      >
+        {children}
+      </select>
+    </div>
+  )
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function Booking() {
@@ -133,6 +198,31 @@ export default function Booking() {
   const [message,         setMessage]         = useState('')
   const [status,          setStatus]          = useState('idle') // idle | sending | sent | error
   const [preferredPerson, setPreferredPerson] = useState(() => sessionStorage.getItem('preferredPerson') || '')
+  const [dateError,       setDateError]       = useState('')
+
+  // Listen for team "Objednat" clicks even when this component is already mounted
+  useEffect(() => {
+    const handler = (e) => {
+      setPreferredPerson(e.detail)
+      sessionStorage.setItem('preferredPerson', e.detail)
+    }
+    window.addEventListener('setPreferredPerson', handler)
+    return () => window.removeEventListener('setPreferredPerson', handler)
+  }, [])
+
+  function handleDateChange(val) {
+    const blocked = isBlockedDate(val)
+    if (blocked === 'weekend') {
+      setDateError('Pracujeme pouze Po–Pá. Zvolte pracovní den.')
+      setDate('')
+    } else if (blocked === 'holiday') {
+      setDateError('Tento den je státní svátek. Zvolte jiný termín.')
+      setDate('')
+    } else {
+      setDateError('')
+      setDate(val)
+    }
+  }
 
   function toggleService(itemName) {
     setSelected(prev => {
@@ -252,22 +342,30 @@ export default function Booking() {
 
               {/* Date + Time */}
               <div className="flex flex-col gap-5">
-                <InputField
-                  label="Datum"
-                  type="date"
-                  value={date}
-                  onChange={setDate}
-                  required
-                  placeholder=""
-                />
-                <InputField
-                  label="Čas"
-                  type="time"
-                  value={time}
-                  onChange={setTime}
-                  required
-                  placeholder=""
-                />
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-body text-[10px] tracking-widest uppercase text-mauve">
+                    Datum <span className="text-mauve">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={e => handleDateChange(e.target.value)}
+                    min={todayString()}
+                    required
+                    className="border border-stone bg-white font-body text-sm text-ink px-4 py-2.5 focus:outline-none focus:border-mauve transition-colors"
+                  />
+                  {dateError && (
+                    <p className="font-body text-xs text-mauve-deep leading-snug">{dateError}</p>
+                  )}
+                  <p className="font-body text-[10px] text-frost">Po – Pá, bez státních svátků</p>
+                </div>
+
+                <SelectField label="Čas" value={time} onChange={setTime} required>
+                  <option value="">Vyberte čas</option>
+                  {TIME_SLOTS.map(slot => (
+                    <option key={slot} value={slot}>{slot}</option>
+                  ))}
+                </SelectField>
               </div>
             </div>
           </Reveal>

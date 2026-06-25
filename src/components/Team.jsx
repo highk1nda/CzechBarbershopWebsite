@@ -58,7 +58,10 @@ export default function Team() {
                   </div>
                   <a
                     href="#booking"
-                    onClick={() => sessionStorage.setItem('preferredPerson', member.name)}
+                    onClick={() => {
+                      sessionStorage.setItem('preferredPerson', member.name)
+                      window.dispatchEvent(new CustomEvent('setPreferredPerson', { detail: member.name }))
+                    }}
                     className="self-start border border-stone text-warm font-body text-[10px] sm:text-xs sm:tracking-widest uppercase px-2.5 sm:px-3.5 py-1.5 hover:border-mauve hover:text-mauve transition-all duration-300">
                     Objednat
                   </a>
