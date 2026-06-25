@@ -161,7 +161,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: 'easeOut', delay: 0.1 }}
-        className="relative order-1 lg:order-2 h-[55vw] lg:h-auto min-h-[380px]"
+        className="relative overflow-hidden order-1 lg:order-2 h-[55vw] lg:h-auto min-h-[380px]"
       >
         <img
           src="/assets/outside30degreeangle2.jpeg"

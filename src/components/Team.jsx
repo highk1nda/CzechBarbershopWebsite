@@ -39,27 +39,27 @@ export default function Team() {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 items-stretch">
           {team.map((member, i) => (
-            <Reveal key={i} delay={i * 0.09}>
-              <div className="bg-white border border-stone shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-500 group">
+            <Reveal key={i} delay={i * 0.09} className="h-full">
+              <div className="h-full flex flex-col bg-white border border-stone shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-500 group">
                 {/* Photo */}
-                <div className="aspect-[4/5] overflow-hidden">
+                <div className="aspect-[4/5] overflow-hidden flex-shrink-0">
                   {member.photo
                     ? <img src={member.photo} alt={member.name}
                         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
                     : <Placeholder />}
                 </div>
                 {/* Info */}
-                <div className="px-6 py-5 border-t border-stone flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-heading text-ink text-lg">{member.name}</p>
-                    <p className="font-body text-sm tracking-wide uppercase text-mauve mt-1">{member.role}</p>
+                <div className="px-3 sm:px-5 py-3 sm:py-4 border-t border-stone flex flex-col gap-2 mt-auto">
+                  <div className="min-w-0">
+                    <p className="font-heading text-ink text-base sm:text-lg leading-tight">{member.name}</p>
+                    <p className="font-body text-[10px] sm:text-xs tracking-wide uppercase text-mauve mt-0.5 leading-tight">{member.role}</p>
                   </div>
                   <a
                     href="#booking"
                     onClick={() => sessionStorage.setItem('preferredPerson', member.name)}
-                    className="flex-shrink-0 border border-stone text-warm font-body text-xs tracking-widest uppercase px-3.5 py-1.5 hover:border-mauve hover:text-mauve transition-all duration-300 mt-0.5">
+                    className="self-start border border-stone text-warm font-body text-[10px] sm:text-xs sm:tracking-widest uppercase px-2.5 sm:px-3.5 py-1.5 hover:border-mauve hover:text-mauve transition-all duration-300">
                     Objednat
                   </a>
                 </div>
