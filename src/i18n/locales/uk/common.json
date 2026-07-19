@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "links": {
+      "services": "Послуги",
+      "team": "Команда",
+      "gallery": "Галерея",
+      "contact": "Контакти"
+    },
+    "cta": "Забронювати",
+    "menu": "Меню"
+  },
+  "hero": {
+    "eyebrow": "Прага · Перукарня та косметологія",
+    "tagline": "Там, де краса та турбота поєднуються воєдино — ваш простір, де ви почуваєтесь добре.",
+    "ctaBook": "Забронювати термін",
+    "ctaServices": "Наші послуги",
+    "ticker": "ЩОЙНО ВІДКРИТО · "
+  },
+  "highlights": {
+    "items": [
+      { "label": "Професійна команда", "desc": "Досвідчені перукарі та фахівці з догляду за красою" },
+      { "label": "Преміальна продукція", "desc": "Лише перевірені бренди для вашого волосся та шкіри" },
+      { "label": "Легке бронювання", "desc": "Онлайн або телефоном, у зручний для вас час" }
+    ]
+  },
+  "team": {
+    "eyebrow": "Люди за MAISON",
+    "headingPrefix": "Наша",
+    "headingHighlight": "команда",
+    "subtitle": "Фахівці, які дбають про вашу красу з пристрастю та досвідом.",
+    "bookCta": "Забронювати"
+  },
+  "gallery": {
+    "eyebrow": "Простір",
+    "heading": "Галерея",
+    "subtitle": "Зазирніть у світ MAISON beauty.",
+    "alts": {
+      "mirrors": "Дзеркала в салоні",
+      "workstations": "Робочі місця",
+      "interior": "Інтер'єр салону",
+      "frontDoors": "Вхідні двері",
+      "exterior": "Екстер'єр салону",
+      "outside": "Салон зовні"
+    }
+  },
+  "instagram": {
+    "headingPrefix": "Слідкуйте за нами",
+    "headingHighlight": "в Instagram",
+    "subtitle": "Щоденне натхнення, новини та закуліси салону.",
+    "stats": {
+      "posts": "Дописів",
+      "followers": "Підписників",
+      "following": "Підписки"
+    },
+    "followCta": "Стежити в Instagram",
+    "alts": {
+      "interior": "Інтер'єр салону",
+      "mirrors": "Дзеркала в салоні",
+      "workstations": "Робочі місця",
+      "photo": "Фото з салону",
+      "exterior": "Екстер'єр салону",
+      "frontDoors": "Вхідні двері"
+    }
+  },
+  "contact": {
+    "eyebrow": "Завітайте до нас",
+    "headingPrefix": "Де нас",
+    "headingHighlight": "знайти",
+    "hoursLabel": "Робочі години",
+    "hours": {
+      "weekdays": "Понеділок – П'ятниця",
+      "saturday": "Субота",
+      "sunday": "Неділя"
+    },
+    "closed": "Зачинено",
+    "qrCaption": "Відскануйте QR-код",
+    "qrDesc": "Швидкий доступ до нашої сторінки на телефоні.",
+    "mapTitle": "MAISON beauty — карта"
+  },
+  "footer": {
+    "copyright": "Усі права захищені.",
+    "instagramAria": "Instagram",
+    "facebookAria": "Facebook"
+  }
+}

@@ -1,6 +1,8 @@
+import { useEffect, useRef, useState } from 'react'
 import { Reveal } from '../Reveal'
 import FloatingFlower from '../FloatingFlower'
 import { useBookingCart } from '../../context/BookingCartContext'
+import { pluralizeSluzba } from '../../utils/cartCalculations'
 import ProgressSteps from './ProgressSteps'
 import StepTransition from './StepTransition'
 import CartPanel from './CartPanel'
@@ -20,12 +22,34 @@ const STEP_COMPONENTS = {
   4: StepConfirmation,
 }
 
+const STEP_LABELS = { 1: 'Služby', 2: 'Termín', 3: 'Údaje', 4: 'Potvrzení' }
+
 export default function BookingSection() {
   const { state, cartCount } = useBookingCart()
   const StepComponent = STEP_COMPONENTS[state.step]
 
+  const [liveMessage, setLiveMessage] = useState('')
+  const isFirstStepRender = useRef(true)
+  const prevCartCount = useRef(cartCount)
+
+  useEffect(() => {
+    if (isFirstStepRender.current) {
+      isFirstStepRender.current = false
+      return
+    }
+    setLiveMessage(`Krok ${state.step}: ${STEP_LABELS[state.step]}`)
+  }, [state.step])
+
+  useEffect(() => {
+    if (cartCount !== prevCartCount.current) {
+      prevCartCount.current = cartCount
+      setLiveMessage(`Rezervace: ${cartCount} ${pluralizeSluzba(cartCount)}`)
+    }
+  }, [cartCount])
+
   return (
     <section id="services" className="section-padding bg-ivory relative overflow-hidden">
+      <div aria-live="polite" className="sr-only">{liveMessage}</div>
       <FloatingFlower
         src={flowers1Img}
         style={{ top: '-30px', right: '-40px', width: '300px', opacity: 0.10 }}
@@ -54,8 +78,8 @@ export default function BookingSection() {
           <ProgressSteps />
         </Reveal>
 
-        <div className={`grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:gap-10 mt-10 ${cartCount > 0 ? 'pb-28 lg:pb-0' : ''}`}>
-          <div>
+        <div className={`grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:gap-10 mt-10 ${cartCount > 0 ? 'pb-28 lg:pb-0' : ''}`}>
+          <div className="min-w-0">
             <StepTransition id={state.step}>
               <StepComponent />
             </StepTransition>

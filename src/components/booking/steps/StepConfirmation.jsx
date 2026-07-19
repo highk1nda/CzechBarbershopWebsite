@@ -1,19 +1,12 @@
-import { motion } from 'framer-motion'
 import { useBookingCart } from '../../../context/BookingCartContext'
+import CheckmarkMorph from '../CheckmarkMorph'
 
 export default function StepConfirmation() {
   const { cartItems, reset } = useBookingCart()
 
   return (
     <div className="rounded-3xl border border-stone bg-white shadow-soft p-8 sm:p-12 text-center">
-      <motion.div
-        initial={{ scale: 0.6, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="w-16 h-16 rounded-full bg-mauve/10 flex items-center justify-center mx-auto mb-6"
-      >
-        <span className="text-3xl text-mauve" aria-hidden="true">✓</span>
-      </motion.div>
+      <CheckmarkMorph />
 
       <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">Rezervace online</p>
       <h3 className="font-heading text-3xl sm:text-4xl text-ink mb-4">

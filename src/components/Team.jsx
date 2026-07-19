@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Reveal } from './Reveal'
 import { team } from '../data/team'
 import { useBookingCart } from '../context/BookingCartContext'
@@ -15,6 +16,7 @@ function Placeholder() {
 }
 
 export default function Team() {
+  const { t } = useTranslation()
   const { setStylist } = useBookingCart()
 
   return (
@@ -23,14 +25,14 @@ export default function Team() {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
           <Reveal>
-            <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">Lidé za MAISON</p>
+            <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">{t('team.eyebrow')}</p>
             <h2 className="font-heading text-4xl lg:text-5xl text-ink">
-              Náš <em className="text-mauve not-italic">tým</em>
+              {t('team.headingPrefix')} <em className="text-mauve not-italic">{t('team.headingHighlight')}</em>
             </h2>
           </Reveal>
           <Reveal delay={0.12}>
             <p className="font-body text-base text-charcoal max-w-xs leading-relaxed">
-              Odborníci, kteří se starají o vaši krásu s vášní a zkušeností.
+              {t('team.subtitle')}
             </p>
           </Reveal>
         </div>
@@ -56,7 +58,7 @@ export default function Team() {
                     href="#services"
                     onClick={() => setStylist(member.name)}
                     className="self-start border border-stone text-warm font-body text-[10px] sm:text-xs sm:tracking-widest uppercase px-2.5 sm:px-3.5 py-1.5 hover:border-mauve hover:text-mauve transition-all duration-300">
-                    Objednat
+                    {t('team.bookCta')}
                   </a>
                 </div>
               </div>

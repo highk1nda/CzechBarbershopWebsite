@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "links": {
+      "services": "Services",
+      "team": "Team",
+      "gallery": "Gallery",
+      "contact": "Contact"
+    },
+    "cta": "Book Now",
+    "menu": "Menu"
+  },
+  "hero": {
+    "eyebrow": "Prague · Hair & Beauty Salon",
+    "tagline": "Where beauty and care come together — your space to feel good.",
+    "ctaBook": "Book an Appointment",
+    "ctaServices": "Our Services",
+    "ticker": "JUST OPENED · "
+  },
+  "highlights": {
+    "items": [
+      { "label": "Professional Team", "desc": "Experienced hairdressers and beauty care specialists" },
+      { "label": "Premium Products", "desc": "Only trusted brands for your hair and skin" },
+      { "label": "Easy Booking", "desc": "Online or by phone, at a time that suits you" }
+    ]
+  },
+  "team": {
+    "eyebrow": "The People Behind MAISON",
+    "headingPrefix": "Our",
+    "headingHighlight": "Team",
+    "subtitle": "Experts who take care of your beauty with passion and experience.",
+    "bookCta": "Book"
+  },
+  "gallery": {
+    "eyebrow": "Our Space",
+    "heading": "Gallery",
+    "subtitle": "Take a look inside MAISON beauty.",
+    "alts": {
+      "mirrors": "Salon mirrors",
+      "workstations": "Work stations",
+      "interior": "Salon interior",
+      "frontDoors": "Front doors",
+      "exterior": "Salon exterior",
+      "outside": "Salon from outside"
+    }
+  },
+  "instagram": {
+    "headingPrefix": "Follow Us",
+    "headingHighlight": "on Instagram",
+    "subtitle": "Daily inspiration, news, and behind-the-scenes from the salon.",
+    "stats": {
+      "posts": "Posts",
+      "followers": "Followers",
+      "following": "Following"
+    },
+    "followCta": "Follow on Instagram",
+    "alts": {
+      "interior": "Salon interior",
+      "mirrors": "Salon mirrors",
+      "workstations": "Work stations",
+      "photo": "Photo from the salon",
+      "exterior": "Salon exterior",
+      "frontDoors": "Front doors"
+    }
+  },
+  "contact": {
+    "eyebrow": "Visit Us",
+    "headingPrefix": "Find",
+    "headingHighlight": "Us",
+    "hoursLabel": "Opening Hours",
+    "hours": {
+      "weekdays": "Monday – Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "closed": "Closed",
+    "qrCaption": "Scan the QR code",
+    "qrDesc": "Quick access to our page on your phone.",
+    "mapTitle": "MAISON beauty — map"
+  },
+  "footer": {
+    "copyright": "All rights reserved.",
+    "instagramAria": "Instagram",
+    "facebookAria": "Facebook"
+  }
+}

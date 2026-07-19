@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "links": {
+      "services": "Služby",
+      "team": "Tým",
+      "gallery": "Galerie",
+      "contact": "Kontakt"
+    },
+    "cta": "Rezervovat",
+    "menu": "Menu"
+  },
+  "hero": {
+    "eyebrow": "Praha · Kadeřnictví & Kosmetika",
+    "tagline": "Kde krása a péče splývají v jedno — váš prostor, kde se cítíte dobře.",
+    "ctaBook": "Rezervovat termín",
+    "ctaServices": "Naše služby",
+    "ticker": "PRÁVĚ OTEVŘENO · "
+  },
+  "highlights": {
+    "items": [
+      { "label": "Profesionální tým", "desc": "Zkušení kadeřníci a specialisté péče o krásu" },
+      { "label": "Prémiové produkty", "desc": "Pouze ověřené značky pro vaše vlasy a pleť" },
+      { "label": "Snadná rezervace", "desc": "Online i telefonicky, v čase, který vám vyhovuje" }
+    ]
+  },
+  "team": {
+    "eyebrow": "Lidé za MAISON",
+    "headingPrefix": "Náš",
+    "headingHighlight": "tým",
+    "subtitle": "Odborníci, kteří se starají o vaši krásu s vášní a zkušeností.",
+    "bookCta": "Objednat"
+  },
+  "gallery": {
+    "eyebrow": "Prostory",
+    "heading": "Galerie",
+    "subtitle": "Nahlédněte do světa MAISON beauty.",
+    "alts": {
+      "mirrors": "Zrcadla v salonu",
+      "workstations": "Pracovní místa",
+      "interior": "Interiér salonu",
+      "frontDoors": "Vchodové dveře",
+      "exterior": "Exteriér salonu",
+      "outside": "Salon zvenčí"
+    }
+  },
+  "instagram": {
+    "headingPrefix": "Sledujte nás",
+    "headingHighlight": "na Instagramu",
+    "subtitle": "Každodenní inspirace, novinky a zákulisí salonu.",
+    "stats": {
+      "posts": "Příspěvků",
+      "followers": "Sledujících",
+      "following": "Sleduje"
+    },
+    "followCta": "Sledovat na Instagramu",
+    "alts": {
+      "interior": "Interiér salonu",
+      "mirrors": "Zrcadla v salonu",
+      "workstations": "Pracovní místa",
+      "photo": "Foto ze salonu",
+      "exterior": "Exteriér salonu",
+      "frontDoors": "Vchodové dveře"
+    }
+  },
+  "contact": {
+    "eyebrow": "Přijďte za námi",
+    "headingPrefix": "Kde nás",
+    "headingHighlight": "najdete",
+    "hoursLabel": "Otevírací doba",
+    "hours": {
+      "weekdays": "Pondělí – Pátek",
+      "saturday": "Sobota",
+      "sunday": "Neděle"
+    },
+    "closed": "Zavřeno",
+    "qrCaption": "Naskenujte QR kód",
+    "qrDesc": "Rychlý přístup k naší stránce na telefonu.",
+    "mapTitle": "MAISON beauty — mapa"
+  },
+  "footer": {
+    "copyright": "Všechna práva vyhrazena.",
+    "instagramAria": "Instagram",
+    "facebookAria": "Facebook"
+  }
+}

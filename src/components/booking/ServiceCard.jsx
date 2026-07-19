@@ -51,7 +51,7 @@ export default function ServiceCard({ item, onLearnMore }) {
           type="button"
           onClick={() => (inCart ? removeItem(item.id) : addItem(item.id))}
           aria-pressed={inCart}
-          className={`ml-auto font-body text-xs tracking-widest2 uppercase px-4 py-2 rounded-full border transition-all duration-300 whitespace-nowrap ${
+          className={`ml-auto font-body text-xs tracking-widest2 uppercase px-4 py-2 min-h-[48px] rounded-full border transition-all duration-300 whitespace-nowrap ${
             inCart
               ? 'bg-mauve border-mauve text-white'
               : 'border-mauve text-mauve-deep hover:bg-mauve hover:text-white'

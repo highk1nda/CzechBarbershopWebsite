@@ -1,11 +1,12 @@
+import { useTranslation } from 'react-i18next'
 import { Reveal } from './Reveal'
 
 const qrCode = '/assets/qr code.png'
 
 const hours = [
-  { day: 'Pondělí – Pátek', time: '9:00 – 19:00', closed: false },
-  { day: 'Sobota',           time: '9:00 – 16:00', closed: false },
-  { day: 'Neděle',           time: 'Zavřeno',       closed: true  },
+  { dayKey: 'weekdays', time: '9:00 – 19:00', closed: false },
+  { dayKey: 'saturday', time: '9:00 – 16:00', closed: false },
+  { dayKey: 'sunday',   time: null,           closed: true  },
 ]
 
 function Icon({ path, viewBox = '0 0 24 24' }) {
@@ -18,14 +19,16 @@ function Icon({ path, viewBox = '0 0 24 24' }) {
 }
 
 export default function Contact() {
+  const { t } = useTranslation()
+
   return (
     <section id="contact" className="section-padding bg-parchment border-t border-stone">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         <Reveal className="mb-12">
-          <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">Přijďte za námi</p>
+          <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">{t('contact.eyebrow')}</p>
           <h2 className="font-heading text-4xl lg:text-5xl text-ink">
-            Kde nás <em className="text-mauve not-italic">najdete</em>
+            {t('contact.headingPrefix')} <em className="text-mauve not-italic">{t('contact.headingHighlight')}</em>
           </h2>
         </Reveal>
 
@@ -59,12 +62,14 @@ export default function Contact() {
               </div>
 
               <div className="pt-6 border-t border-stone">
-                <p className="font-body text-xs tracking-widest2 uppercase text-mauve mb-4">Otevírací doba</p>
+                <p className="font-body text-xs tracking-widest2 uppercase text-mauve mb-4">{t('contact.hoursLabel')}</p>
                 <div className="space-y-2">
                   {hours.map(h => (
-                    <div key={h.day} className="flex justify-between font-body text-base">
-                      <span className="text-warm">{h.day}</span>
-                      <span className={h.closed ? 'text-frost' : 'text-charcoal'}>{h.time}</span>
+                    <div key={h.dayKey} className="flex justify-between font-body text-base">
+                      <span className="text-warm">{t(`contact.hours.${h.dayKey}`)}</span>
+                      <span className={h.closed ? 'text-frost' : 'text-charcoal'}>
+                        {h.closed ? t('contact.closed') : h.time}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -73,8 +78,8 @@ export default function Contact() {
               <div className="pt-6 border-t border-stone flex items-center gap-5">
                 <img src={qrCode} alt="QR kód – MAISON beauty" className="w-20 h-20 object-contain flex-shrink-0" />
                 <div>
-                  <p className="font-body text-xs tracking-widest2 uppercase text-mauve mb-1">Naskenujte QR kód</p>
-                  <p className="font-body text-sm text-charcoal leading-relaxed">Rychlý přístup k naší stránce na telefonu.</p>
+                  <p className="font-body text-xs tracking-widest2 uppercase text-mauve mb-1">{t('contact.qrCaption')}</p>
+                  <p className="font-body text-sm text-charcoal leading-relaxed">{t('contact.qrDesc')}</p>
                 </div>
               </div>
             </div>
@@ -89,7 +94,7 @@ export default function Contact() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="MAISON beauty — mapa"
+                title={t('contact.mapTitle')}
               />
             </div>
           </Reveal>

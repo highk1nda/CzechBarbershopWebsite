@@ -20,7 +20,7 @@ export default function SearchBar({ value, onChange }) {
           type="button"
           onClick={() => onChange('')}
           aria-label="Vymazat hledání"
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-frost hover:text-mauve-deep transition-colors text-lg leading-none w-6 h-6 flex items-center justify-center"
+          className="absolute right-1 top-1/2 -translate-y-1/2 text-frost hover:text-mauve-deep transition-colors text-lg leading-none w-11 h-11 flex items-center justify-center"
         >
           ×
         </button>

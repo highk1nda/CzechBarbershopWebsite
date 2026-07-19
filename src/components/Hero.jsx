@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import FloatingFlower from './FloatingFlower'
 
 const flowerImg   = '/assets/flower.png'
@@ -12,11 +13,11 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } },
 }
 
-// Long enough that the -50% loop point is never visibly reached mid-screen
-const BASE = 'JUST OPENED · PRÁVĚ OTEVŘENO · '
-const TICKER = BASE.repeat(16)
-
 function JustOpenedX() {
+  const { t } = useTranslation()
+  // Long enough that the -50% loop point is never visibly reached mid-screen
+  const TICKER = t('hero.ticker').repeat(16)
+
   return (
     <div
       className="absolute inset-x-0 pointer-events-none"
@@ -99,6 +100,8 @@ function JustOpenedX() {
 }
 
 export default function Hero() {
+  const { t } = useTranslation()
+
   return (
     <section id="hero" className="min-h-screen grid lg:grid-cols-2 pt-16">
 
@@ -127,7 +130,7 @@ export default function Hero() {
 
           <motion.p variants={item}
             className="font-body text-xs tracking-widest3 uppercase text-mauve mb-7">
-            Praha · Kadeřnictví & Kosmetika
+            {t('hero.eyebrow')}
           </motion.p>
 
           <motion.h1 variants={item}
@@ -141,17 +144,17 @@ export default function Hero() {
 
           <motion.p variants={item}
             className="font-body text-base text-charcoal leading-relaxed max-w-xs mb-10">
-            Kde krása a péče splývají v jedno — váš prostor, kde se cítíte dobře.
+            {t('hero.tagline')}
           </motion.p>
 
           <motion.div variants={item} className="flex flex-wrap gap-3">
             <a href="#services"
               className="bg-mauve text-white font-body text-xs tracking-widest2 uppercase px-8 py-3.5 hover:bg-mauve-deep transition-colors duration-300">
-              Rezervovat termín
+              {t('hero.ctaBook')}
             </a>
             <a href="#services"
               className="border border-stone text-charcoal font-body text-xs tracking-widest2 uppercase px-8 py-3.5 hover:border-mauve hover:text-mauve transition-all duration-300">
-              Naše služby
+              {t('hero.ctaServices')}
             </a>
           </motion.div>
         </motion.div>

@@ -45,7 +45,7 @@ export default function DatePicker({ value, onChange }) {
   }
 
   return (
-    <div className="rounded-2xl border border-stone p-4 sm:p-5 bg-white">
+    <div className="rounded-2xl border border-stone p-3 sm:p-5 bg-white">
       <div className="flex items-center justify-between mb-4">
         <button
           type="button"
@@ -90,7 +90,7 @@ export default function DatePicker({ value, onChange }) {
               onClick={() => onChange(dateStr)}
               aria-pressed={isSelected}
               aria-label={dateStr}
-              className={`aspect-square rounded-full flex items-center justify-center font-body text-sm transition-colors duration-200 ${
+              className={`aspect-square min-h-[40px] rounded-full flex items-center justify-center font-body text-sm transition-colors duration-200 ${
                 isSelected
                   ? 'bg-mauve text-white'
                   : blocked

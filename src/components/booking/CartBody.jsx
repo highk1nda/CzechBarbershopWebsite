@@ -1,7 +1,27 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useBookingCart } from '../../context/BookingCartContext'
 import { pluralizeSluzba } from '../../utils/cartCalculations'
 import AddOnsSuggestions from './AddOnsSuggestions'
+
+function PulseValue({ value, className }) {
+  const reduceMotion = useReducedMotion()
+  return (
+    <span className="relative inline-grid">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={value}
+          initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -6, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className={className}
+          style={{ gridArea: '1 / 1' }}
+        >
+          {value}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
 
 export default function CartBody() {
   const { state, cartItems, cartCount, priceEstimate, durationEstimate, removeItem, nextStep } = useBookingCart()
@@ -41,7 +61,7 @@ export default function CartBody() {
                   type="button"
                   onClick={() => removeItem(item.id)}
                   aria-label={`Odebrat ${item.name}`}
-                  className="text-frost hover:text-mauve-deep transition-colors text-xl leading-none flex-shrink-0 w-6 h-6 flex items-center justify-center"
+                  className="text-frost hover:text-mauve-deep transition-colors text-xl leading-none flex-shrink-0 w-11 h-11 -my-2.5 -mr-2 flex items-center justify-center"
                 >
                   ×
                 </button>
@@ -57,11 +77,11 @@ export default function CartBody() {
         <div className="border-t border-stone pt-4 space-y-2 mb-5">
           <div className="flex justify-between font-body text-sm">
             <span className="text-warm">Odhad délky</span>
-            <span className="text-ink text-right">{durationEstimate.label}</span>
+            <PulseValue value={durationEstimate.label} className="text-ink text-right" />
           </div>
           <div className="flex justify-between font-body text-sm">
             <span className="text-warm">Odhad ceny</span>
-            <span className="text-mauve-deep font-semibold text-right">{priceEstimate.label}</span>
+            <PulseValue value={priceEstimate.label} className="text-mauve-deep font-semibold text-right" />
           </div>
         </div>
       )}

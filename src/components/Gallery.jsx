@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Reveal } from './Reveal'
 
 const photos = [
-  { src: '/assets/inside3_mirror.jpeg',     alt: 'Zrcadla v salonu',  span: 'col-span-2 row-span-2' },
-  { src: '/assets/inside4_barbershop.jpeg', alt: 'Pracovní místa',    span: '' },
-  { src: '/assets/photo-inside.jpeg',       alt: 'Interiér salonu',   span: '' },
-  { src: '/assets/front_doors.jpeg',        alt: 'Vchodové dveře',    span: '' },
-  { src: '/assets/outside2.jpeg',           alt: 'Exteriér salonu',   span: '' },
-  { src: '/assets/outside.jpeg',            alt: 'Salon zvenčí',      span: '' },
+  { src: '/assets/inside3_mirror.jpeg',     altKey: 'mirrors',      span: 'col-span-2 row-span-2' },
+  { src: '/assets/inside4_barbershop.jpeg', altKey: 'workstations', span: '' },
+  { src: '/assets/photo-inside.jpeg',       altKey: 'interior',     span: '' },
+  { src: '/assets/front_doors.jpeg',        altKey: 'frontDoors',   span: '' },
+  { src: '/assets/outside2.jpeg',           altKey: 'exterior',     span: '' },
+  { src: '/assets/outside.jpeg',            altKey: 'outside',      span: '' },
 ]
 
 export default function Gallery() {
+  const { t } = useTranslation()
   const [lightbox, setLightbox] = useState(null)
 
   return (
@@ -20,12 +22,12 @@ export default function Gallery() {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
           <Reveal>
-            <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">Prostory</p>
-            <h2 className="font-heading text-4xl lg:text-5xl text-ink">Galerie</h2>
+            <p className="font-body text-xs tracking-widest3 uppercase text-mauve mb-3">{t('gallery.eyebrow')}</p>
+            <h2 className="font-heading text-4xl lg:text-5xl text-ink">{t('gallery.heading')}</h2>
           </Reveal>
           <Reveal delay={0.12}>
             <p className="font-body text-base text-charcoal max-w-xs leading-relaxed">
-              Nahlédněte do světa MAISON beauty.
+              {t('gallery.subtitle')}
             </p>
           </Reveal>
         </div>
@@ -39,7 +41,7 @@ export default function Gallery() {
                 className="w-full h-full overflow-hidden relative"
                 onClick={() => setLightbox(photo)}
               >
-                <img src={photo.src} alt={photo.alt} loading="lazy"
+                <img src={photo.src} alt={t(`gallery.alts.${photo.altKey}`)} loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/15 transition-colors duration-500 flex items-center justify-center">
                   <span className="text-white text-2xl font-light opacity-0 group-hover:opacity-100 transition-opacity duration-400">
@@ -69,7 +71,7 @@ export default function Gallery() {
               exit={{ opacity: 0, scale: 0.94 }}
               transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
               src={lightbox.src}
-              alt={lightbox.alt}
+              alt={t(`gallery.alts.${lightbox.altKey}`)}
               className="max-w-full max-h-[88vh] object-contain shadow-lift"
             />
             <button onClick={() => setLightbox(null)}

@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from './LanguageSwitcher'
 
 const links = [
-  { href: '#services',  label: 'Služby'    },
-  { href: '#team',      label: 'Tým'       },
-  { href: '#gallery',   label: 'Galerie'   },
-  { href: '#contact',   label: 'Kontakt'   },
+  { href: '#services', key: 'services' },
+  { href: '#team',     key: 'team'     },
+  { href: '#gallery',  key: 'gallery'  },
+  { href: '#contact',  key: 'contact'  },
 ]
 
 export default function Navbar() {
+  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -42,27 +45,31 @@ export default function Navbar() {
             {links.map(l => (
               <a key={l.href} href={l.href}
                 className="font-body text-sm tracking-widest2 uppercase text-charcoal hover:text-ink transition-colors duration-300 relative group">
-                {l.label}
+                {t(`nav.links.${l.key}`)}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-mauve transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </nav>
 
-          <a href="#services"
-            className="hidden lg:inline-block font-body text-sm tracking-widest2 uppercase bg-mauve text-white px-5 py-2.5 hover:bg-mauve-deep transition-all duration-300">
-            Rezervovat
-          </a>
+          <div className="flex items-center gap-3 lg:gap-5">
+            <a href="#services"
+              className="hidden lg:inline-block font-body text-sm tracking-widest2 uppercase bg-mauve text-white px-5 py-2.5 hover:bg-mauve-deep transition-all duration-300">
+              {t('nav.cta')}
+            </a>
 
-          {/* Hamburger */}
-          <button
-            onClick={() => setMenuOpen(o => !o)}
-            aria-label="Menu"
-            className="lg:hidden p-2 flex flex-col gap-1.5"
-          >
-            <span className={`block w-6 h-px bg-ink transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`block w-4 h-px bg-ink transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-            <span className={`block w-6 h-px bg-ink transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-          </button>
+            <LanguageSwitcher />
+
+            {/* Hamburger */}
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              aria-label={t('nav.menu')}
+              className="lg:hidden p-2 flex flex-col gap-1.5"
+            >
+              <span className={`block w-6 h-px bg-ink transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`block w-4 h-px bg-ink transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block w-6 h-px bg-ink transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -85,12 +92,12 @@ export default function Navbar() {
                 transition={{ delay: 0.08 + i * 0.055 }}
                 className="font-heading text-3xl text-ink hover:text-mauve transition-colors"
               >
-                {l.label}
+                {t(`nav.links.${l.key}`)}
               </motion.a>
             ))}
             <a href="#services" onClick={() => setMenuOpen(false)}
               className="mt-4 bg-mauve text-white font-body text-xs tracking-widest2 uppercase px-8 py-3 hover:bg-mauve-deep transition-all duration-300">
-              Rezervovat
+              {t('nav.cta')}
             </a>
           </motion.div>
         )}
