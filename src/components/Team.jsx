@@ -1,12 +1,6 @@
 import { Reveal } from './Reveal'
-
-const team = [
-  { name: 'Kocka', role: 'Kadeřnice & Koloristka',       photo: '/assets/cat_avatar.jpg' },
-  { name: 'Sonya', role: 'Nehtová umělkyně',             photo: '/assets/cat_avatar2.jpg' },
-  { name: 'Siruy', role: 'Specialistka na řasy & obočí', photo: '/assets/cat_avatar3.jpg' },
-  { name: 'Maks',  role: 'Kadeřník & Stylista',          photo: '/assets/cat_avatar4.jpg' },
-  { name: 'Maria', role: 'Vizážistka & Koloristka',      photo: '/assets/cat_avatar5.jpg' },
-]
+import { team } from '../data/team'
+import { useBookingCart } from '../context/BookingCartContext'
 
 function Placeholder() {
   return (
@@ -21,6 +15,8 @@ function Placeholder() {
 }
 
 export default function Team() {
+  const { setStylist } = useBookingCart()
+
   return (
     <section id="team" className="section-padding bg-parchment border-t border-stone">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -57,11 +53,8 @@ export default function Team() {
                     <p className="font-body text-[10px] sm:text-xs tracking-wide uppercase text-mauve mt-0.5 leading-tight">{member.role}</p>
                   </div>
                   <a
-                    href="#booking"
-                    onClick={() => {
-                      sessionStorage.setItem('preferredPerson', member.name)
-                      window.dispatchEvent(new CustomEvent('setPreferredPerson', { detail: member.name }))
-                    }}
+                    href="#services"
+                    onClick={() => setStylist(member.name)}
                     className="self-start border border-stone text-warm font-body text-[10px] sm:text-xs sm:tracking-widest uppercase px-2.5 sm:px-3.5 py-1.5 hover:border-mauve hover:text-mauve transition-all duration-300">
                     Objednat
                   </a>

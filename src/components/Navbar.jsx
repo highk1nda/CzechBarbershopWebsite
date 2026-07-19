@@ -48,7 +48,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <a href="#booking"
+          <a href="#services"
             className="hidden lg:inline-block font-body text-sm tracking-widest2 uppercase bg-mauve text-white px-5 py-2.5 hover:bg-mauve-deep transition-all duration-300">
             Rezervovat
           </a>
@@ -88,7 +88,7 @@ export default function Navbar() {
                 {l.label}
               </motion.a>
             ))}
-            <a href="#booking" onClick={() => setMenuOpen(false)}
+            <a href="#services" onClick={() => setMenuOpen(false)}
               className="mt-4 bg-mauve text-white font-body text-xs tracking-widest2 uppercase px-8 py-3 hover:bg-mauve-deep transition-all duration-300">
               Rezervovat
             </a>

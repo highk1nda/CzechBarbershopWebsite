@@ -145,7 +145,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={item} className="flex flex-wrap gap-3">
-            <a href="#booking"
+            <a href="#services"
               className="bg-mauve text-white font-body text-xs tracking-widest2 uppercase px-8 py-3.5 hover:bg-mauve-deep transition-colors duration-300">
               Rezervovat termín
             </a>
