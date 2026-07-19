@@ -1,9 +1,9 @@
-import { useRef } from 'react'
-import { team } from '../../data/team'
-
-const OPTIONS = ['', ...team.map((m) => m.name)]
+import { useRef, useMemo } from 'react'
+import { useContent } from '../../context/ContentContext'
 
 export default function StylistPills({ value, onChange }) {
+  const { team } = useContent()
+  const OPTIONS = useMemo(() => ['', ...team.map((m) => m.name)], [team])
   const refs = useRef([])
   const selectedIndex = Math.max(OPTIONS.indexOf(value), 0)
 

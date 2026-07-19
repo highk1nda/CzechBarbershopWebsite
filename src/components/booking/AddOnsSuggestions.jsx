@@ -1,23 +1,23 @@
 import { useMemo } from 'react'
 import { useBookingCart } from '../../context/BookingCartContext'
-import { ITEMS_BY_ID } from '../../data/services'
-import { RECOMMENDED_ADD_ONS } from '../../data/addOns'
+import { useContent } from '../../context/ContentContext'
 
 export default function AddOnsSuggestions() {
   const { state, cartItems, addItem } = useBookingCart()
+  const { ITEMS_BY_ID, addOns } = useContent()
 
   const suggestions = useMemo(() => {
-    const categoryTitles = new Set(cartItems.map((item) => item.categoryTitle))
+    const categoryIds = new Set(cartItems.map((item) => item.categoryId))
     const suggestedIds = new Set()
-    categoryTitles.forEach((title) => {
-      (RECOMMENDED_ADD_ONS[title] || []).forEach((id) => suggestedIds.add(id))
+    categoryIds.forEach((categoryId) => {
+      (addOns[categoryId] || []).forEach((id) => suggestedIds.add(id))
     })
     return Array.from(suggestedIds)
       .filter((id) => !state.cart.has(id))
       .map((id) => ITEMS_BY_ID[id])
       .filter(Boolean)
       .slice(0, 3)
-  }, [cartItems, state.cart])
+  }, [cartItems, state.cart, ITEMS_BY_ID, addOns])
 
   if (suggestions.length === 0) return null
 

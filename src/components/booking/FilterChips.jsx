@@ -1,8 +1,6 @@
-import { SERVICES } from '../../data/services'
+export default function FilterChips({ services, activeCategory, onSelect }) {
+  const ALL_CATEGORY_TITLES = services.flatMap((tab) => tab.categories.map((cat) => cat.title))
 
-const ALL_CATEGORY_TITLES = SERVICES.flatMap((tab) => tab.categories.map((cat) => cat.title))
-
-export default function FilterChips({ activeCategory, onSelect }) {
   return (
     <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1" role="group" aria-label="Rychlé filtry kategorií">
       {ALL_CATEGORY_TITLES.map((title) => (

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Reveal } from './Reveal'
-import { team } from '../data/team'
+import { useContent } from '../context/ContentContext'
 import { useBookingCart } from '../context/BookingCartContext'
 
 function Placeholder() {
@@ -18,6 +18,7 @@ function Placeholder() {
 export default function Team() {
   const { t } = useTranslation()
   const { setStylist } = useBookingCart()
+  const { team, loading } = useContent()
 
   return (
     <section id="team" className="section-padding bg-parchment border-t border-stone">
@@ -38,8 +39,11 @@ export default function Team() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 items-stretch">
+          {loading && team.length === 0 && (
+            <p className="col-span-full font-body text-sm text-warm text-center py-8">Načítáme tým…</p>
+          )}
           {team.map((member, i) => (
-            <Reveal key={i} delay={i * 0.09} className="h-full">
+            <Reveal key={member.id} delay={i * 0.09} className="h-full">
               <div className="h-full flex flex-col bg-white border border-stone shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-500 group">
                 {/* Photo */}
                 <div className="aspect-[4/5] overflow-hidden flex-shrink-0">

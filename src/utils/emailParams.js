@@ -1,7 +1,7 @@
 // EmailJS credentials (emailjs.com) — Service ID / Template ID / Public Key
-export const EMAILJS_SERVICE_ID = 'service_5yt31kq'
-export const EMAILJS_TEMPLATE_ID = 'template_fd1br92'
-export const EMAILJS_PUBLIC_KEY = 'RzSL5SRtdfLdYLbzM'
+export const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+export const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+export const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 // Template variables used: {{client_name}}, {{client_email}}, {{client_phone}},
 //   {{services}}, {{workers}}, {{preferred_person}}, {{datetime}}, {{message}}

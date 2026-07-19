@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
 import emailjs from '@emailjs/browser'
-import { ITEMS_BY_ID } from '../data/services'
+import { useContent } from './ContentContext'
 import { aggregateCart } from '../utils/cartCalculations'
 import { buildEmailParams, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY } from '../utils/emailParams'
 
@@ -72,6 +72,7 @@ function reducer(state, action) {
 }
 
 export function BookingCartProvider({ children }) {
+  const { ITEMS_BY_ID } = useContent()
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const addItem = useCallback((id) => dispatch({ type: 'ADD_ITEM', id }), [])
@@ -102,7 +103,7 @@ export function BookingCartProvider({ children }) {
 
   const cartItemsForSubmit = useMemo(
     () => Array.from(state.cart).map((id) => ITEMS_BY_ID[id]).filter(Boolean),
-    [state.cart]
+    [state.cart, ITEMS_BY_ID]
   )
 
   const submitBooking = useCallback(async () => {
@@ -142,7 +143,7 @@ export function BookingCartProvider({ children }) {
 
   const cartItems = useMemo(
     () => Array.from(state.cart).map((id) => ITEMS_BY_ID[id]).filter(Boolean),
-    [state.cart]
+    [state.cart, ITEMS_BY_ID]
   )
   const cartCount = cartItems.length
   const { price: priceEstimate, duration: durationEstimate } = useMemo(

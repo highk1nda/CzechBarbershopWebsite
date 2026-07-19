@@ -258,7 +258,7 @@ export const ALL_ITEMS = SERVICES.flatMap(tab =>
 
 export const ITEMS_BY_ID = Object.fromEntries(ALL_ITEMS.map(item => [item.id, item]))
 
-if (import.meta.env.DEV) {
+if (import.meta.env?.DEV) {
   const ids = ALL_ITEMS.map(i => i.id)
   const dupes = ids.filter((id, i) => ids.indexOf(id) !== i)
   if (dupes.length) console.error('Duplicate service ids in services.js:', dupes)

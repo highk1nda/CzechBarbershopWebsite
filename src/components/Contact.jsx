@@ -1,13 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { Reveal } from './Reveal'
+import { useContent } from '../context/ContentContext'
 
 const qrCode = '/assets/qr code.png'
-
-const hours = [
-  { dayKey: 'weekdays', time: '9:00 – 19:00', closed: false },
-  { dayKey: 'saturday', time: '9:00 – 16:00', closed: false },
-  { dayKey: 'sunday',   time: null,           closed: true  },
-]
 
 function Icon({ path, viewBox = '0 0 24 24' }) {
   return (
@@ -20,6 +15,16 @@ function Icon({ path, viewBox = '0 0 24 24' }) {
 
 export default function Contact() {
   const { t } = useTranslation()
+  const { settings } = useContent()
+
+  const hours = [
+    { dayKey: 'weekdays', time: settings.hours_weekdays_time, closed: false },
+    { dayKey: 'saturday', time: settings.hours_saturday_time, closed: false },
+    { dayKey: 'sunday', time: null, closed: settings.hours_sunday_closed === 'true' },
+  ]
+  const phone = settings.phone ?? ''
+  const email = settings.email ?? ''
+  const mapQuery = settings.map_query ?? ''
 
   return (
     <section id="contact" className="section-padding bg-parchment border-t border-stone">
@@ -41,23 +46,23 @@ export default function Contact() {
               <div className="flex items-start gap-3.5">
                 <Icon path={<><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></>} />
                 <p className="font-body text-base text-charcoal leading-relaxed">
-                  Na Bělidle 840/22<br />Praha 5, 150 00
+                  {settings.address_street}<br />{settings.address_city}
                 </p>
               </div>
 
               <div className="flex items-start gap-3.5">
                 <Icon path={<><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>} />
-                <a href="mailto:info@maisonbeauty.cz"
+                <a href={`mailto:${email}`}
                   className="font-body text-base text-charcoal hover:text-mauve transition-colors">
-                  info@maisonbeauty.cz
+                  {email}
                 </a>
               </div>
 
               <div className="flex items-start gap-3.5">
                 <Icon path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.07 3.4 2 2 0 0 1 3.05 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 16.92z"/>} />
-                <a href="tel:+420000000000"
+                <a href={`tel:${phone.replace(/\s+/g, '')}`}
                   className="font-body text-base text-charcoal hover:text-mauve transition-colors">
-                  +420 000 000 000
+                  {phone}
                 </a>
               </div>
 
@@ -89,7 +94,7 @@ export default function Contact() {
           <Reveal dir="right">
             <div className="border border-stone overflow-hidden min-h-[360px] h-full">
               <iframe
-                src="https://maps.google.com/maps?q=Na+B%C4%9Blid%C5%82e+840%2F22%2C+150+00+Praha+5%2C+Czech+Republic&output=embed&hl=cs&z=16"
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed&hl=cs&z=16`}
                 className="w-full h-full min-h-[360px] border-0"
                 allowFullScreen
                 loading="lazy"

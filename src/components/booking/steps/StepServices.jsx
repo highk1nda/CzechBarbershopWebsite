@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { SERVICES, ALL_ITEMS } from '../../../data/services'
+import { useContent } from '../../../context/ContentContext'
 import CategoryCard from '../CategoryCard'
 import AccordionSection from '../AccordionSection'
 import ServiceCard from '../ServiceCard'
@@ -10,10 +10,18 @@ import SearchBar from '../SearchBar'
 import FilterChips from '../FilterChips'
 
 export default function StepServices() {
-  const [activeTabId, setActiveTabId] = useState(SERVICES[0].id)
-  const [openCategory, setOpenCategory] = useState(SERVICES[0].categories[0]?.title ?? null)
+  const { SERVICES, ALL_ITEMS, loading, error } = useContent()
+  const [activeTabId, setActiveTabId] = useState(null)
+  const [openCategory, setOpenCategory] = useState(null)
   const [modalItem, setModalItem] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    if (SERVICES.length > 0 && activeTabId === null) {
+      setActiveTabId(SERVICES[0].id)
+      setOpenCategory(SERVICES[0].categories[0]?.title ?? null)
+    }
+  }, [SERVICES, activeTabId])
 
   const activeTab = SERVICES.find((t) => t.id === activeTabId)
   const isSearching = searchQuery.trim().length > 0
@@ -24,7 +32,7 @@ export default function StepServices() {
     return ALL_ITEMS.filter(
       (item) => item.name.toLowerCase().includes(q) || (item.desc && item.desc.toLowerCase().includes(q))
     )
-  }, [searchQuery, isSearching])
+  }, [searchQuery, isSearching, ALL_ITEMS])
 
   function handleCategoryCardClick(tab) {
     if (tab.id === activeTabId) return
@@ -40,6 +48,18 @@ export default function StepServices() {
     requestAnimationFrame(() => {
       document.getElementById('services-category-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
+  }
+
+  if (error) {
+    return (
+      <p className="font-body text-sm text-warm text-center py-12">
+        Nepodařilo se načíst ceník. Zkuste prosím obnovit stránku.
+      </p>
+    )
+  }
+
+  if (loading || !activeTab) {
+    return <p className="font-body text-sm text-warm text-center py-12">Načítáme ceník…</p>
   }
 
   return (
@@ -62,7 +82,7 @@ export default function StepServices() {
           </div>
 
           <div className="mb-8">
-            <FilterChips activeCategory={openCategory} onSelect={handleChipClick} />
+            <FilterChips services={SERVICES} activeCategory={openCategory} onSelect={handleChipClick} />
           </div>
         </>
       )}

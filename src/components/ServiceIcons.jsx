@@ -35,6 +35,8 @@ const ICON_SRCS = {
   nail:      sparklesSvg,
 }
 
+export const ICON_NAMES = Object.keys(ICON_SRCS)
+
 const svgBase = 'w-6 h-6'
 
 export function ServiceIcon({ name, className = '' }) {
