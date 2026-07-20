@@ -1,10 +1,30 @@
 import { useBookingCart } from '../../../context/BookingCartContext'
+import { useContent } from '../../../context/ContentContext'
 import { formatDateDisplay } from '../../../utils/dateRules'
 import { FloatingInput, FloatingTextarea } from '../FloatingInput'
 
+const SUBMIT_ERROR_MESSAGES = {
+  slot_taken: 'Tento termín právě obsadil jiný zákazník. Vyberte prosím jiný čas.',
+  no_specialist_available: 'V tuto chvíli nemáme volného specialistu pro zvolený termín. Zkuste prosím jiný čas nebo den.',
+  outside_business_hours: 'Zvolený čas je mimo otevírací dobu. Vyberte prosím jiný termín.',
+  time_in_past: 'Zvolený čas už uplynul. Vyberte prosím jiný termín.',
+  date_in_past: 'Zvolené datum už uplynulo. Vyberte prosím jiný termín.',
+  specialist_unavailable: 'Zvolený specialista již není dostupný. Zkuste to prosím bez preference nebo s jiným specialistou.',
+}
+const SUBMIT_ERRORS_NEEDING_NEW_TIME = new Set([
+  'slot_taken',
+  'no_specialist_available',
+  'outside_business_hours',
+  'time_in_past',
+  'date_in_past',
+  'specialist_unavailable',
+])
+
 function ReviewPhase() {
-  const { state, cartItems, priceEstimate, durationEstimate, setDetailsPhase, submitBooking, canSubmit } = useBookingCart()
+  const { state, cartItems, priceEstimate, durationEstimate, setDetailsPhase, submitBooking, canSubmit, goToStep } = useBookingCart()
+  const { team } = useContent()
   const { name, email, phone } = state.details
+  const stylistName = team.find((m) => m.id === state.appointment.stylist)?.name
 
   return (
     <div className="rounded-3xl border border-stone bg-white shadow-soft p-6 sm:p-8">
@@ -41,10 +61,10 @@ function ReviewPhase() {
             <p className="font-body text-[10px] tracking-widest uppercase text-mauve mb-1">Čas</p>
             <p className="font-body text-sm text-ink">{state.appointment.time}</p>
           </div>
-          {state.appointment.stylist && (
+          {stylistName && (
             <div>
               <p className="font-body text-[10px] tracking-widest uppercase text-mauve mb-1">Specialista</p>
-              <p className="font-body text-sm text-ink">{state.appointment.stylist}</p>
+              <p className="font-body text-sm text-ink">{stylistName}</p>
             </div>
           )}
         </div>
@@ -57,9 +77,20 @@ function ReviewPhase() {
       </div>
 
       {state.status === 'error' && (
-        <p className="font-body text-sm text-red-500 mb-4">
-          Něco se pokazilo. Zkuste to znovu nebo nás kontaktujte přímo.
-        </p>
+        <div className="mb-4">
+          <p className="font-body text-sm text-red-500">
+            {SUBMIT_ERROR_MESSAGES[state.submitError] || 'Něco se pokazilo. Zkuste to znovu nebo nás kontaktujte přímo.'}
+          </p>
+          {SUBMIT_ERRORS_NEEDING_NEW_TIME.has(state.submitError) && (
+            <button
+              type="button"
+              onClick={() => goToStep(2)}
+              className="font-body text-xs text-mauve underline hover:text-mauve-deep mt-2"
+            >
+              Vybrat jiný termín
+            </button>
+          )}
+        </div>
       )}
 
       <div className="flex justify-between">

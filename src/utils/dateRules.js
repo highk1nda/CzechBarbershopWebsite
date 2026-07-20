@@ -15,11 +15,12 @@ function easterSunday(year) {
   return new Date(year, month - 1, day)
 }
 
-export function isBlockedDate(dateStr) {
+export function isBlockedDate(dateStr, settings = {}) {
   if (!dateStr) return false
   const d = new Date(dateStr + 'T12:00:00')
   const dow = d.getDay()
-  if (dow === 0 || dow === 6) return 'weekend'
+  if (dow === 0 && settings.booking_sunday_closed !== 'false') return 'closed'
+  if (dow === 6 && settings.booking_saturday_closed !== 'false') return 'closed'
   const mmdd = dateStr.slice(5)
   if (CZ_HOLIDAYS.includes(mmdd)) return 'holiday'
   const easter = easterSunday(d.getFullYear())
@@ -44,9 +45,7 @@ export function todayString() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 }
 
-// Half-hour slots 8:00–17:00
-export const TIME_SLOTS = []
-for (let h = 8; h <= 17; h++) {
-  TIME_SLOTS.push(`${String(h).padStart(2, '0')}:00`)
-  if (h < 17) TIME_SLOTS.push(`${String(h).padStart(2, '0')}:30`)
+export function nowTimeString() {
+  const now = new Date()
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 }

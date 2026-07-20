@@ -46,3 +46,13 @@ export function pluralizeSluzba(n) {
   if (n >= 2 && n <= 4) return 'služby'
   return 'služeb'
 }
+
+// Blocking-math fallback for services with no duration set yet — keep this in
+// sync with _book_reservation's SQL default in supabase/schema.sql. Display
+// (aggregateCart above) intentionally never uses this — it keeps showing
+// "Přesnou dobu upřesníme při potvrzení" for null-duration items.
+export const FALLBACK_DURATION_MINUTES = 60
+
+export function effectiveDurationMinutes(items) {
+  return items.reduce((total, item) => total + (item.duration_min_minutes ?? FALLBACK_DURATION_MINUTES), 0)
+}

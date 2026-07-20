@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Reveal } from './Reveal'
 import { useContent } from '../context/ContentContext'
+import { formatHoursRange } from '../utils/availability'
 
 const qrCode = '/assets/qr code.png'
 
@@ -18,9 +19,13 @@ export default function Contact() {
   const { settings } = useContent()
 
   const hours = [
-    { dayKey: 'weekdays', time: settings.hours_weekdays_time, closed: false },
-    { dayKey: 'saturday', time: settings.hours_saturday_time, closed: false },
-    { dayKey: 'sunday', time: null, closed: settings.hours_sunday_closed === 'true' },
+    { dayKey: 'weekdays', time: formatHoursRange(settings.booking_weekday_open, settings.booking_weekday_close), closed: false },
+    {
+      dayKey: 'saturday',
+      time: formatHoursRange(settings.booking_saturday_open, settings.booking_saturday_close),
+      closed: settings.booking_saturday_closed === 'true',
+    },
+    { dayKey: 'sunday', time: null, closed: settings.booking_sunday_closed !== 'false' },
   ]
   const phone = settings.phone ?? ''
   const email = settings.email ?? ''

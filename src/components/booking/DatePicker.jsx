@@ -11,7 +11,7 @@ function toDateStr(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
 }
 
-export default function DatePicker({ value, onChange }) {
+export default function DatePicker({ value, onChange, settings }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(today.getFullYear())
   const [viewMonth, setViewMonth] = useState(today.getMonth())
@@ -80,7 +80,7 @@ export default function DatePicker({ value, onChange }) {
         {cells.map((d, i) => {
           if (d === null) return <span key={`empty-${i}`} />
           const dateStr = toDateStr(viewYear, viewMonth, d)
-          const blocked = dateStr < todayStr || Boolean(isBlockedDate(dateStr))
+          const blocked = dateStr < todayStr || Boolean(isBlockedDate(dateStr, settings))
           const isSelected = value === dateStr
           return (
             <button
@@ -104,7 +104,7 @@ export default function DatePicker({ value, onChange }) {
         })}
       </div>
 
-      <p className="font-body text-[10px] text-frost mt-3">Po – Pá, bez státních svátků</p>
+      <p className="font-body text-[10px] text-frost mt-3">Dle otevírací doby, bez státních svátků</p>
     </div>
   )
 }

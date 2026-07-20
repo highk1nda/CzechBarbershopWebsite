@@ -1,18 +1,59 @@
+import { useCallback, useEffect, useState } from 'react'
 import { useBookingCart } from '../../../context/BookingCartContext'
-import { isBlockedDate } from '../../../utils/dateRules'
+import { useContent } from '../../../context/ContentContext'
+import { supabase } from '../../../lib/supabaseClient'
+import { isBlockedDate, todayString, nowTimeString } from '../../../utils/dateRules'
+import { effectiveDurationMinutes } from '../../../utils/cartCalculations'
+import {
+  getDaySchedule,
+  generateSlotStarts,
+  computeQualifiedTeamMemberIds,
+  computeAvailableSlots,
+} from '../../../utils/availability'
 import DatePicker from '../DatePicker'
 import TimePills from '../TimePills'
 import StylistPills from '../StylistPills'
 import { FloatingTextarea } from '../FloatingInput'
 
 export default function StepAppointment() {
-  const { state, setAppointmentField, setDateError, prevStep, nextStep } = useBookingCart()
+  const { state, cartItems, setAppointmentField, setDateError, setStylist, prevStep, nextStep } = useBookingCart()
+  const { settings, team, loading: contentLoading } = useContent()
   const { date, time, stylist, notes } = state.appointment
 
+  const [bookedRanges, setBookedRanges] = useState({})
+  const [slotsLoading, setSlotsLoading] = useState(false)
+  const [slotsError, setSlotsError] = useState(false)
+
+  const fetchBookedRanges = useCallback((forDate) => {
+    if (!forDate) return
+    let cancelled = false
+    setSlotsLoading(true)
+    setSlotsError(false)
+    supabase
+      .rpc('get_booked_ranges', { p_date: forDate })
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error) {
+          setSlotsError(true)
+          setSlotsLoading(false)
+          return
+        }
+        const byMember = {}
+        for (const row of data) (byMember[row.team_member_id] ??= []).push(row)
+        setBookedRanges(byMember)
+        setSlotsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => fetchBookedRanges(date), [date, fetchBookedRanges])
+
   function handleDateChange(val) {
-    const blocked = isBlockedDate(val)
-    if (blocked === 'weekend') {
-      setDateError('Pracujeme pouze Po–Pá. Zvolte pracovní den.')
+    const blocked = isBlockedDate(val, settings)
+    if (blocked === 'closed') {
+      setDateError('V tento den je zavřeno. Zvolte prosím jiný termín.')
       return
     }
     if (blocked === 'holiday') {
@@ -23,7 +64,30 @@ export default function StepAppointment() {
     setAppointmentField('date', val)
   }
 
-  const canContinue = Boolean(date) && Boolean(time)
+  const durationMinutes = effectiveDurationMinutes(cartItems)
+  const qualifiedIds = computeQualifiedTeamMemberIds(cartItems, team)
+  const allActiveIds = team.map((m) => m.id)
+  const schedule = getDaySchedule(date, settings)
+  const candidateSlots = generateSlotStarts(schedule.open, schedule.close, durationMinutes)
+  const availableSet = computeAvailableSlots({
+    candidateSlots,
+    durationMinutes,
+    bookedRanges,
+    selectedStylistId: stylist || null,
+    qualifiedIds,
+    allActiveIds,
+    todayFloorTime: date === todayString() ? nowTimeString() : null,
+  })
+
+  const canContinue = Boolean(date) && Boolean(time) && availableSet.has(time)
+
+  if (contentLoading) {
+    return (
+      <div className="rounded-3xl border border-stone bg-white shadow-soft p-6 sm:p-8">
+        <p className="font-body text-sm text-warm">Načítání…</p>
+      </div>
+    )
+  }
 
   return (
     <div className="rounded-3xl border border-stone bg-white shadow-soft p-6 sm:p-8">
@@ -33,18 +97,30 @@ export default function StepAppointment() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <p className="font-body text-[10px] tracking-widest uppercase text-mauve mb-2">Datum *</p>
-          <DatePicker value={date} onChange={handleDateChange} />
+          <DatePicker value={date} onChange={handleDateChange} settings={settings} />
           {state.dateError && <p className="font-body text-xs text-mauve-deep mt-2">{state.dateError}</p>}
         </div>
         <div>
           <p className="font-body text-[10px] tracking-widest uppercase text-mauve mb-2">Čas *</p>
-          <TimePills value={time} onChange={(v) => setAppointmentField('time', v)} />
+          {date ? (
+            <TimePills
+              value={time}
+              onChange={(v) => setAppointmentField('time', v)}
+              slots={candidateSlots}
+              availableSet={availableSet}
+              loading={slotsLoading}
+              error={slotsError}
+              onRetry={() => fetchBookedRanges(date)}
+            />
+          ) : (
+            <p className="font-body text-sm text-warm">Nejprve vyberte datum.</p>
+          )}
         </div>
       </div>
 
       <div className="mb-6">
         <p className="font-body text-[10px] tracking-widest uppercase text-mauve mb-2">Preferovaný specialista (volitelné)</p>
-        <StylistPills value={stylist} onChange={(v) => setAppointmentField('stylist', v)} />
+        <StylistPills value={stylist} onChange={setStylist} qualifiedIds={qualifiedIds} />
       </div>
 
       <div className="mb-8">
@@ -52,7 +128,7 @@ export default function StepAppointment() {
       </div>
 
       {!canContinue && (
-        <p className="font-body text-xs text-stone mb-4">Zadejte datum a čas.</p>
+        <p className="font-body text-xs text-stone mb-4">Zadejte datum a volný čas.</p>
       )}
 
       <div className="flex justify-between">

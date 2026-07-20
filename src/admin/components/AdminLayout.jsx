@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext'
 
 const NAV_LINKS = [
   { to: '/admin', label: 'Přehled', end: true },
+  { to: '/admin/reservations', label: 'Rezervace' },
   { to: '/admin/services', label: 'Služby' },
   { to: '/admin/team', label: 'Tým' },
   { to: '/admin/content', label: 'Texty webu' },

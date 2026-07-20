@@ -24,6 +24,7 @@ async function fetchAdmin() {
 export default function ServicesListPage() {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
+  const [deleteError, setDeleteError] = useState('')
   const [pendingDelete, setPendingDelete] = useState(null)
   const [newCategoryTab, setNewCategoryTab] = useState(null)
   const [newCategoryTitle, setNewCategoryTitle] = useState('')
@@ -46,8 +47,15 @@ export default function ServicesListPage() {
   }
 
   async function deleteService(service) {
-    await supabase.from('services').delete().eq('id', service.id)
+    const { error: deleteErr } = await supabase.from('services').delete().eq('id', service.id)
     setPendingDelete(null)
+    if (deleteErr) {
+      setDeleteError(
+        deleteErr.code === '23503' ? 'Nelze smazat — existují rezervace, které tuto službu využívají.' : deleteErr.message
+      )
+      return
+    }
+    setDeleteError('')
     load()
   }
 
@@ -91,6 +99,7 @@ export default function ServicesListPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-heading text-3xl text-ink">Služby</h1>
       </div>
+      {deleteError && <p className="font-body text-sm text-red-600 mb-4">{deleteError}</p>}
 
       {tabs.map((tab) => {
         const tabCategories = categories.filter((c) => c.tab_id === tab.id).sort((a, b) => a.sort_order - b.sort_order)

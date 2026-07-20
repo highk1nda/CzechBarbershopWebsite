@@ -21,6 +21,7 @@ async function fetchTeam() {
 export default function TeamPage() {
   const [members, setMembers] = useState(null)
   const [error, setError] = useState('')
+  const [deleteError, setDeleteError] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [pendingDelete, setPendingDelete] = useState(null)
 
@@ -39,8 +40,15 @@ export default function TeamPage() {
   }
 
   async function deleteMember(member) {
-    await supabase.from('team_members').delete().eq('id', member.id)
+    const { error: deleteErr } = await supabase.from('team_members').delete().eq('id', member.id)
     setPendingDelete(null)
+    if (deleteErr) {
+      setDeleteError(
+        deleteErr.code === '23503' ? 'Nelze smazat — existují rezervace, které tuto osobu využívají.' : deleteErr.message
+      )
+      return
+    }
+    setDeleteError('')
     load()
   }
 
@@ -88,6 +96,7 @@ export default function TeamPage() {
   return (
     <div>
       <h1 className="font-heading text-3xl text-ink mb-8">Tým</h1>
+      {deleteError && <p className="font-body text-sm text-red-600 mb-4">{deleteError}</p>}
 
       <div className="bg-white border border-stone shadow-soft">
         {members.map((member, index) => {

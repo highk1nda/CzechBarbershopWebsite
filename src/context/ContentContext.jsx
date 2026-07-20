@@ -113,6 +113,7 @@ function buildContent(raw, lang) {
       price: formatItemPrice(row),
       duration: formatItemDuration(row),
       workers: (row.service_workers ?? []).map((w) => teamById[w.team_member_id]?.name).filter(Boolean),
+      workerIds: (row.service_workers ?? []).map((w) => w.team_member_id),
       details: hasDetails ? { text: t.details_text ?? '', steps: t.details_steps ?? undefined, photos } : undefined,
       categoryId: row.category_id,
     }

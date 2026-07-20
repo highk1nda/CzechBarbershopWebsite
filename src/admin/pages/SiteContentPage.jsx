@@ -8,10 +8,16 @@ const SETTINGS_FIELDS = [
   { key: 'email', label: 'E-mail' },
   { key: 'address_street', label: 'Adresa — ulice' },
   { key: 'address_city', label: 'Adresa — město' },
-  { key: 'hours_weekdays_time', label: 'Otevírací doba — všední dny' },
-  { key: 'hours_saturday_time', label: 'Otevírací doba — sobota' },
-  { key: 'hours_sunday_closed', label: 'Neděle zavřeno (true/false)' },
   { key: 'map_query', label: 'Adresa pro mapu (Google Maps)' },
+]
+
+const HOURS_FIELDS = [
+  { key: 'booking_weekday_open', label: 'Po–Pá — otevírací čas', type: 'time' },
+  { key: 'booking_weekday_close', label: 'Po–Pá — zavírací čas', type: 'time' },
+  { key: 'booking_saturday_closed', label: 'Sobota zavřeno', type: 'checkbox' },
+  { key: 'booking_saturday_open', label: 'Sobota — otevírací čas', type: 'time' },
+  { key: 'booking_saturday_close', label: 'Sobota — zavírací čas', type: 'time' },
+  { key: 'booking_sunday_closed', label: 'Neděle zavřeno', type: 'checkbox' },
 ]
 
 function prettifyKey(key) {
@@ -82,7 +88,10 @@ export default function SiteContentPage() {
           if (value !== undefined && value !== '') contentPayload.push({ key, lang, value })
         }
       }
-      const settingsPayload = SETTINGS_FIELDS.map((f) => ({ key: f.key, value: settings[f.key] ?? '' }))
+      const settingsPayload = [...SETTINGS_FIELDS, ...HOURS_FIELDS].map((f) => ({
+        key: f.key,
+        value: settings[f.key] ?? (f.type === 'checkbox' ? 'false' : ''),
+      }))
 
       const [contentRes, settingsRes] = await Promise.all([
         supabase.from('site_content').upsert(contentPayload),
@@ -114,6 +123,29 @@ export default function SiteContentPage() {
                 className="w-full border border-stone px-3 py-2 font-body text-sm mt-1 focus:outline-none focus:border-mauve"
               />
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-white border border-stone shadow-soft p-6 mb-6">
+        <h2 className="font-heading text-lg text-ink mb-4">Otevírací doba (rezervace)</h2>
+        <p className="font-body text-xs text-warm mb-4">
+          Řídí veřejně zobrazenou otevírací dobu i to, jaké termíny lze online rezervovat.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {HOURS_FIELDS.filter(
+            (f) =>
+              !(
+                (f.key === 'booking_saturday_open' || f.key === 'booking_saturday_close') &&
+                settings.booking_saturday_closed === 'true'
+              )
+          ).map((f) => (
+            <SettingField
+              key={f.key}
+              field={f}
+              value={settings[f.key]}
+              onChange={(value) => setSettings((s) => ({ ...s, [f.key]: value }))}
+            />
           ))}
         </div>
       </section>
@@ -164,6 +196,28 @@ export default function SiteContentPage() {
           {saving ? 'Ukládání…' : 'Uložit vše'}
         </button>
       </div>
+    </div>
+  )
+}
+
+function SettingField({ field, value, onChange }) {
+  if (field.type === 'checkbox') {
+    return (
+      <label className="flex items-center gap-1.5 font-body text-sm text-charcoal mt-1 sm:col-span-2">
+        <input type="checkbox" checked={value === 'true'} onChange={(e) => onChange(e.target.checked ? 'true' : 'false')} />
+        {field.label}
+      </label>
+    )
+  }
+  return (
+    <div>
+      <label className="font-body text-xs tracking-wide uppercase text-mauve">{field.label}</label>
+      <input
+        type={field.type === 'time' ? 'time' : 'text'}
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full border border-stone px-3 py-2 font-body text-sm mt-1 focus:outline-none focus:border-mauve"
+      />
     </div>
   )
 }

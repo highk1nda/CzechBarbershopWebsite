@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
 import emailjs from '@emailjs/browser'
 import { useContent } from './ContentContext'
+import { supabase } from '../lib/supabaseClient'
 import { aggregateCart } from '../utils/cartCalculations'
 import { buildEmailParams, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY } from '../utils/emailParams'
 
@@ -8,7 +9,7 @@ const BookingCartContext = createContext(null)
 
 function readStoredStylist() {
   try {
-    return sessionStorage.getItem('preferredPerson') || ''
+    return sessionStorage.getItem('preferredStylistId') || ''
   } catch {
     return ''
   }
@@ -22,6 +23,7 @@ const initialState = {
   dateError: '',
   details: { name: '', email: '', phone: '', message: '' },
   status: 'idle', // idle | sending | sent | error
+  submitError: null, // null | 'slot_taken' | 'no_specialist_available' | ...other RPC codes | 'unexpected'
 }
 
 function reducer(state, action) {
@@ -60,6 +62,8 @@ function reducer(state, action) {
       return { ...state, details: { ...state.details, [action.field]: action.value } }
     case 'SET_STATUS':
       return { ...state, status: action.status }
+    case 'SET_SUBMIT_ERROR':
+      return { ...state, submitError: action.error }
     case 'RESET':
       return {
         ...initialState,
@@ -72,7 +76,7 @@ function reducer(state, action) {
 }
 
 export function BookingCartProvider({ children }) {
-  const { ITEMS_BY_ID } = useContent()
+  const { ITEMS_BY_ID, team } = useContent()
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const addItem = useCallback((id) => dispatch({ type: 'ADD_ITEM', id }), [])
@@ -89,10 +93,10 @@ export function BookingCartProvider({ children }) {
     []
   )
   const setDateError = useCallback((message) => dispatch({ type: 'SET_DATE_ERROR', message }), [])
-  const setStylist = useCallback((name) => {
-    dispatch({ type: 'SET_APPOINTMENT_FIELD', field: 'stylist', value: name })
+  const setStylist = useCallback((teamMemberId) => {
+    dispatch({ type: 'SET_APPOINTMENT_FIELD', field: 'stylist', value: teamMemberId })
     try {
-      sessionStorage.setItem('preferredPerson', name)
+      sessionStorage.setItem('preferredStylistId', teamMemberId)
     } catch {
       /* sessionStorage unavailable — stylist stays in memory only */
     }
@@ -108,6 +112,32 @@ export function BookingCartProvider({ children }) {
 
   const submitBooking = useCallback(async () => {
     dispatch({ type: 'SET_STATUS', status: 'sending' })
+    dispatch({ type: 'SET_SUBMIT_ERROR', error: null })
+
+    const combinedNotes = [state.appointment.notes, state.details.message].filter(Boolean).join('\n\n')
+
+    const { data, error: rpcError } = await supabase.rpc('create_reservation', {
+      p_date: state.appointment.date,
+      p_starts_at: state.appointment.time,
+      p_service_ids: Array.from(state.cart),
+      p_team_member_id: state.appointment.stylist || null,
+      p_customer_name: state.details.name,
+      p_customer_email: state.details.email || null,
+      p_customer_phone: state.details.phone || null,
+      p_notes: combinedNotes || null,
+    })
+
+    if (rpcError || data.status !== 'ok') {
+      console.error('create_reservation failed:', rpcError || data)
+      dispatch({ type: 'SET_STATUS', status: 'error' })
+      dispatch({ type: 'SET_SUBMIT_ERROR', error: rpcError ? 'unexpected' : data.code })
+      return
+    }
+
+    // Reservation is already the source of truth at this point — EmailJS is
+    // just a best-effort heads-up, so its failure must never block or scare
+    // the customer after the DB write already succeeded.
+    const assignedMember = team.find((m) => m.id === data.team_member_id)
     try {
       await emailjs.send(
         EMAILJS_SERVICE_ID,
@@ -119,22 +149,24 @@ export function BookingCartProvider({ children }) {
           name: state.details.name,
           email: state.details.email,
           phone: state.details.phone,
-          message: state.details.message,
-          preferredPerson: state.appointment.stylist,
+          message: combinedNotes,
+          preferredPerson: assignedMember
+            ? `${assignedMember.name}${data.was_auto_assigned ? ' (automaticky přiřazeno)' : ''}`
+            : '—',
         }),
         EMAILJS_PUBLIC_KEY
       )
-      dispatch({ type: 'SET_STATUS', status: 'sent' })
-      dispatch({ type: 'SET_STEP', step: 4 })
-    } catch (err) {
-      console.error('EmailJS error:', err)
-      dispatch({ type: 'SET_STATUS', status: 'error' })
+    } catch (emailErr) {
+      console.error('EmailJS notification failed (reservation already saved):', emailErr)
     }
-  }, [cartItemsForSubmit, state.appointment, state.details])
+
+    dispatch({ type: 'SET_STATUS', status: 'sent' })
+    dispatch({ type: 'SET_STEP', step: 4 })
+  }, [cartItemsForSubmit, state.cart, state.appointment, state.details, team])
 
   const reset = useCallback(() => {
     try {
-      sessionStorage.removeItem('preferredPerson')
+      sessionStorage.removeItem('preferredStylistId')
     } catch {
       /* ignore */
     }

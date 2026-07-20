@@ -1,10 +1,22 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useContent } from '../../context/ContentContext'
+import { supabase } from '../../lib/supabaseClient'
 
 export default function DashboardPage() {
   const { team, ALL_ITEMS, SERVICES, loading } = useContent()
+  const [newReservationsCount, setNewReservationsCount] = useState(null)
+
+  useEffect(() => {
+    supabase
+      .from('reservations')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'new')
+      .then(({ count }) => setNewReservationsCount(count ?? 0))
+  }, [])
 
   const cards = [
+    { to: '/admin/reservations', label: 'Rezervace', count: newReservationsCount, sub: 'čeká na schválení' },
     { to: '/admin/services', label: 'Služby', count: ALL_ITEMS.length, sub: `v ${SERVICES.length} kategoriích` },
     { to: '/admin/team', label: 'Tým', count: team.length, sub: 'členů týmu' },
     { to: '/admin/content', label: 'Texty webu', count: null, sub: 'Upravit texty a kontakt' },
@@ -16,7 +28,7 @@ export default function DashboardPage() {
       {loading ? (
         <p className="font-body text-sm text-warm">Načítání…</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {cards.map((card) => (
             <Link
               key={card.to}

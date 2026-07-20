@@ -7,6 +7,8 @@ import ServicesListPage from './pages/ServicesListPage'
 import ServiceEditPage from './pages/ServiceEditPage'
 import TeamPage from './pages/TeamPage'
 import SiteContentPage from './pages/SiteContentPage'
+import ReservationsListPage from './pages/ReservationsListPage'
+import ReservationEditPage from './pages/ReservationEditPage'
 
 export default function AdminApp() {
   return (
@@ -25,6 +27,9 @@ export default function AdminApp() {
         <Route path="services/:id" element={<ServiceEditPage />} />
         <Route path="team" element={<TeamPage />} />
         <Route path="content" element={<SiteContentPage />} />
+        <Route path="reservations" element={<ReservationsListPage />} />
+        <Route path="reservations/new" element={<ReservationEditPage />} />
+        <Route path="reservations/:id" element={<ReservationEditPage />} />
       </Route>
     </Routes>
   )
