@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
+  // twemoji.js injects <img class="emoji"> at runtime (see src/utils/twemoji.js) —
+  // that className never appears literally in any scanned source file, so
+  // Tailwind's content-based tree-shaking strips its CSS rule (src/index.css)
+  // unless explicitly safelisted here.
+  safelist: ['emoji'],
   theme: {
     extend: {
       colors: {
