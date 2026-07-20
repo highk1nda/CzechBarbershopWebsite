@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 const flowers1Img = '/assets/flowers/flowers1.png'
@@ -48,6 +49,12 @@ export default function Footer() {
         <p className="font-body text-xs text-frost tracking-wide">
           &copy; 2026 MAISON beauty. {t('footer.copyright')}
         </p>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-4 text-center relative z-10">
+        <Link to="/admin" className="font-body text-[11px] text-frost/70 hover:text-mauve transition-colors duration-300 underline underline-offset-2">
+          Log in with admin
+        </Link>
       </div>
     </footer>
   )
